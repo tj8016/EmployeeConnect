@@ -1,6 +1,7 @@
 import React from "react";
 import Search from "./Search";
 import Posts from "./Posts";
+import AddPost from "./AddPost";
 
 const Body = () => {
   return (
@@ -10,8 +11,12 @@ const Body = () => {
           <div>
             <Search />
           </div>
-          <div className="flex justify-center">
-            <Posts />
+          <div className="w-full flex justify-center">
+            <div className="flex flex-col justify-center gap-y-4 md:w-8/12">
+              <AddPost />
+              <Posts />
+              <Posts />
+            </div>
           </div>
         </div>
       </div>
