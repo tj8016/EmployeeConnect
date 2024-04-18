@@ -50,16 +50,13 @@ const SingUp = () => {
   };
 
   const onResendOTPSubmit = () => {
-    // dispatch(loadingStart());
-    // API.auth
-    //   .ResendOTP({ email: formValue.email })
-    //   .then((response) => {
-    //     if (response)
-    //       toast.success("OTP has been resent to your email account.");
-    //   })
-    //   .finally(() => {
-    //     dispatch(loadingStop());
-    //   });
+    const data = {
+      first_name: signupData.first_name,
+      last_name: signupData.last_name,
+      email: signupData.email,
+    };
+    console.log(data);
+    dispatch(sendOtp(data, setOtpReceived, setFormValue));
   };
 
   const _this = {

@@ -37,18 +37,18 @@ export const RegisterUser = async (req, res, next) => {
   try {
     //**avatar will be implemented later
     const {
-      first_name,
-      last_name,
-      email,
+      first_name = "",
+      last_name = "",
+      email = "",
       skills = [],
       certificates = [],
-      avatar,
-      password,
-      account_type,
+      avatar = "",
+      password = "",
+      account_type = "",
+      bio = "",
       otp = "",
     } = req.body;
     //check if the user already exists
-    console.log(otp);
     const isExists = await DbUser.findOne({
       $or: [{ email: email }],
     });
@@ -87,6 +87,8 @@ export const RegisterUser = async (req, res, next) => {
       skills,
       certificates,
       email,
+      bio,
+      avatar,
       account_type,
       password: hashedPass,
     });
@@ -139,10 +141,11 @@ export const SendOtp = async (req, res, next) => {
     const otpValue = Math.floor(1000 + Math.random() * 9000);
 
     // Send otp
-    // var otpStatus = null;
-    // const name = first_name + " " + last_name;
-    // otpStatus = await sendOtp(email, name, otpValue);
-    // if (!otpStatus) return ResponseHandler(res, 202, "Failed to send OTP.");
+    var otpStatus = null;
+    const name = first_name + " " + last_name;
+    otpStatus = await sendOtp(email, name, otpValue);
+    if (!otpStatus)
+      return ResponseErrorHandler(res, 202, "Failed to send OTP.");
 
     // store the otp on DB and send responce
     const inserted = await DbOtp.create({
