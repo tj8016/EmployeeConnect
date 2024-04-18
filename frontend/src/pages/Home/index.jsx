@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <div className={`mt-[65px] md:mb-[65px]`}>
+      <div className={`mt-[80px]`}>
         <Body {..._this} />
       </div>
     </>
