@@ -2,6 +2,7 @@ import { Router } from "express";
 import { isAuthenticated } from "../middleware/authentication.js";
 import {
   LoginUser,
+  OtherProfile,
   RegisterUser,
   SendOtp,
   UpdateProfile,
@@ -17,5 +18,6 @@ router.post("/send-otp", SendOtp);
 //authentic routes
 router.post("/update", isAuthenticated, UpdateProfile);
 router.delete("/delete", isAuthenticated, deleteProfile);
+router.post("/get-user", isAuthenticated, OtherProfile);
 
 export default router;
