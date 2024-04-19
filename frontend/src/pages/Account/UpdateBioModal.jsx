@@ -54,7 +54,7 @@ const UpdateBioModal = ({ _this }) => {
           <Input
             size="large"
             className="bg-white rounded-lg w-full"
-            placeholder="Enter your email address"
+            placeholder="Enter your bio"
             label={"bio"}
             // value={_this?.skillinput}
             // onChange={(e) => _this?.setSkillinput(e.target.value)}
