@@ -7,7 +7,10 @@ import cloudinary from "cloudinary";
 /************************************* create post ***************************************/
 export const GetAllPost = async (req, res, next) => {
   try {
-    let post = await DbPost.find().sort({ _id: -1 }).populate("owner");
+    let post = await DbPost.find()
+      .sort({ _id: -1 })
+      .populate("owner")
+      .populate("comments.user");
 
     if (!post) return ResponseErrorHandler(res, 202, "Failed to get all post");
 

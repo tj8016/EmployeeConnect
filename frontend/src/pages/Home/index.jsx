@@ -9,12 +9,18 @@ import {
   getAllPost,
   updatePost,
   addOrRemoveLike,
+  addComment,
 } from "../../services/operations/postApi";
 
 const Home = () => {
   const { token } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
   const [allPostData, setAllPostData] = useState([]);
+  const [addCommentModal, setAddCommentModal] = useState(false);
+  const [commentData, setCommentData] = useState({
+    post_id: "",
+    comment: "",
+  });
   const [addPostModal, setAddPostModal] = useState(false);
   const [editPostModal, setEditPostModal] = useState(false);
   const [deletePostModal, setDeletePostModal] = useState(false);
@@ -115,6 +121,22 @@ const Home = () => {
     getAllPostFunc();
   };
 
+  const addCommentSubmit = async () => {
+    const data = {
+      post_id: addCommentModal,
+      comment: commentData.comment,
+    };
+    const res = await addComment(data, token);
+    getAllPostFunc();
+    if (res !== null) {
+      setCommentData({
+        post_id: "",
+        comment: "",
+      });
+      setAddCommentModal(false);
+    }
+  };
+
   useEffect(() => {
     getAllPostFunc();
   }, []);
@@ -137,6 +159,11 @@ const Home = () => {
     postData,
     setPostData,
     postImageFile,
+    addCommentModal,
+    setAddCommentModal,
+    commentData,
+    setCommentData,
+    addCommentSubmit,
     setPostImageFile,
     uploadImageFile,
     createPostSubmit,

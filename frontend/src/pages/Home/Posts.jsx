@@ -1,13 +1,24 @@
 import React from "react";
 import { FaRegCommentDots } from "react-icons/fa6";
 import { FcLike, FcLikePlaceholder } from "react-icons/fc";
-import { Avatar, Card, Image, Dropdown } from "antd";
+import {
+  Avatar,
+  Card,
+  Image,
+  Dropdown,
+  Input,
+  Collapse,
+  theme,
+  ConfigProvider,
+  Button,
+  Space,
+} from "antd";
 import { HiOutlineTrash } from "react-icons/hi";
 import { AiOutlineEdit } from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { CaretRightOutlined } from "@ant-design/icons";
-import { Collapse, theme, ConfigProvider } from "antd";
+
 const { Meta } = Card;
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -69,12 +80,32 @@ const Posts = ({ post, _this }) => {
     borderRadius: token.borderRadiusLG,
     border: "none",
   };
-
+  console.log(post);
   const getItems = (panelStyle) => [
     {
       key: "1",
-      label: "Comments",
-      children: <div>hello</div>,
+      label: `Comments (${post?.comments.length})`,
+      children: (
+        <div className="flex flex-col gap-y-2">
+          {post?.comments.map((comment) => {
+            return (
+              <div className="bg-white rounded-md pl-3 py-2">
+                <p className="text-xs font-bold">
+                  {`${comment?.user?.first_name} ${comment?.user?.last_name}`}
+                  {post?.owner?._id === comment?.user?._id && (
+                    <span className="ml-2 font-light text-xs bg-green-400/80 text-white rounded-full px-1">
+                      Author
+                    </span>
+                  )}
+                </p>
+                <p className="text-sm font-light text-black/80">
+                  {comment?.comment}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      ),
       style: panelStyle,
     },
   ];
@@ -130,15 +161,17 @@ const Posts = ({ post, _this }) => {
               </div>
             </button>
 
-            <div className="text-black/60 flex flex-col items-center gap-y-1">
+            <button
+              onClick={() => _this?.setAddCommentModal(post?._id)}
+              className="text-black/60 flex flex-col items-center gap-y-1 cursor-pointer"
+            >
               <FaRegCommentDots className="text-2xl" />
               <p className="text-xs">Comment</p>
-            </div>
+            </button>
           </div>
           <div>
             <Collapse
               bordered={false}
-              defaultActiveKey={["1"]}
               expandIcon={({ isActive }) => (
                 <CaretRightOutlined rotate={isActive ? 90 : 0} />
               )}

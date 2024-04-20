@@ -8,6 +8,7 @@ const {
   GET_ALL_POST_API,
   DELETE_POST_API,
   ADD_REMOVE_LIKE_API,
+  ADD_COMMENT_API,
 } = postEndpoints;
 
 export const getAllPost = async () => {
@@ -93,11 +94,28 @@ export const addOrRemoveLike = async (data, token) => {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     });
-    console.log(response);
     if (response?.data?.error) {
       return toast.error(response?.data?.error);
     }
   } catch (error) {
     console.log("ADD_REMOVE_LIKE_API ERROR............", error);
   }
+};
+
+export const addComment = async (data, token) => {
+  let result = null;
+  try {
+    const response = await apiConnector("POST", ADD_COMMENT_API, data, {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    });
+    if (response?.data?.error) {
+      return toast.error(response?.data?.error);
+    }
+    result = response;
+    toast.success("Comment Added");
+  } catch (error) {
+    console.log("ADD_COMMENT_API ERROR............", error);
+  }
+  return result;
 };
