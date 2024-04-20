@@ -7,6 +7,7 @@ export const authEndpoints = {
   LOGIN_API: BASE_URL + "/api/v1/user/login",
   UpdateProfile_API: BASE_URL + "/api/v1/user/update",
   OtherProfile_API: BASE_URL + "/api/v1/user/get-user",
+  DELETECERTIFICATE_API: BASE_URL + "/api/v1/user//delete-certificate",
 };
 
 export const postEndpoints = {

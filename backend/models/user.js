@@ -15,8 +15,7 @@ const schema = new mongoose.Schema(
       trim: true,
     },
     avatar: {
-      public_id: String,
-      avatar_url: String,
+      type: String,
     },
     user_id: {
       type: String,
@@ -45,8 +44,7 @@ const schema = new mongoose.Schema(
     ],
     certificates: [
       {
-        public_id: String,
-        avatar_url: String,
+        img_url: String,
       },
     ],
     posts: [

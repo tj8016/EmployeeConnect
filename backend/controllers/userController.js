@@ -11,6 +11,7 @@ import {
   ValidateEmail,
 } from "../utils/index.js";
 import { sendOtp } from "../services/mail.js";
+import { ImageDeleter, ImageUploader } from "../utils/imageUploader.js";
 /************************************* login function ***************************************/
 export const LoginUser = async (req, res, next) => {
   try {
@@ -165,42 +166,35 @@ export const SendOtp = async (req, res, next) => {
 export const UpdateProfile = async (req, res, next) => {
   try {
     //**avatar update will be implemented later
-    const {
-      first_name,
-      last_name,
-      email,
-      skills = [],
-      files = [],
-      bio = "",
-      avatar,
-    } = req.body;
+    const { first_name, last_name, email, skills = [] } = req.body;
     const { _id } = req.user;
+
+    const files = req.files?.imgFiles;
+    const avatar = req.files?.avatar;
+    const oldpic = req.files?.oldpic;
+    const bio = req.files?.bio;
 
     const user = await DbUser.findOne({ _id });
     //upload certificates
     let newcertificates = user.certificates;
-    for (let item of files) {
-      let myCloud = await cloudinary.v2.uploader.upload(item, {
-        folder: "crud_users",
-      });
-      newcertificates = [
-        ...newcertificates,
-        {
-          public_id: myCloud.public_id,
-          avatar_url: myCloud.secure_url,
-        },
-      ];
-    }
+    if (files?.length)
+      for (let item of files) {
+        let storedUrl = ImageUploader("/uploads/certificates/", item);
+        newcertificates = [
+          ...newcertificates,
+          {
+            img_url: storedUrl,
+          },
+        ];
+      }
 
     //upload avatar
-    const myCloud = await cloudinary.v2.uploader.upload(avatar, {
-      folder: "crud_users",
-    });
-    if (avatar)
-      user.avatar = {
-        public_id: myCloud.public_id,
-        avatar_url: myCloud.secure_url,
-      };
+    if (avatar) {
+      let storedUrl = ImageUploader("/uploads/avatars/", avatar);
+      user.avatar = storedUrl;
+    }
+
+    if (oldpic) ImageDeleter(oldpic);
 
     if (first_name) user.first_name = first_name;
     if (last_name) user.last_name = last_name;
@@ -214,6 +208,28 @@ export const UpdateProfile = async (req, res, next) => {
     return ResponseHandler(res, 200, "Profile updated !", user);
   } catch (error) {
     console.log("profile update error ->", error);
+  }
+};
+
+/***************************************** delete user certifcate ************************************* */
+export const deleteCertificate = async (req, res, next) => {
+  try {
+    const { file } = req.body;
+    const user = req.user;
+    let newcertificates = user.certificates;
+    // delete image file
+
+    const deleteImage = ImageDeleter(file);
+    if (!deleteImage)
+      return ResponseErrorHandler(res, 202, "Existing image file not Deleted.");
+
+    let newcertificate = newcertificates.filter((item) => item.img_url != file);
+    if (newcertificate) user.certificates = newcertificate;
+    await user.save();
+
+    return ResponseHandler(res, 200, "certificate deleted !", user);
+  } catch (error) {
+    console.log("profile delete error ->", error);
   }
 };
 

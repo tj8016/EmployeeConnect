@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Body from "./Body";
 // import { useRoutes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
+  deleteCertificate,
   login,
   updateBioAndAvatar,
   updateUserCertificates,
   updateUserSkills,
 } from "../../services/operations/authApi";
 import toast from "react-hot-toast";
+import { setUser } from "../../reducer/slices/profileSlice";
 
 const Login = () => {
   // const router = useRoutes();
@@ -43,12 +45,18 @@ const Login = () => {
 
   const [updateBioModalOpen, setUpdateBioModalOpen] = useState(false);
   const [userBio, setUserBio] = useState("");
+  const [avatar, setavatar] = useState(null);
 
   const onBioAvatarUpdate = () => {
-    updateBioAndAvatar(token, { avatar, bio: userBio })
+    const formData = new FormData();
+    formData.append("avatar", avatar?.data);
+    formData.append("bio", userBio);
+    formData.append("oldpic", user?.avatar);
+    updateBioAndAvatar(token, formData)
       .then((response) => {
         if (response) {
           setUpdateBioModalOpen(false);
+          dispatch(setUser(response));
         }
       })
       .finally(() => {
@@ -56,41 +64,65 @@ const Login = () => {
       });
   };
 
+  const handleAvatar = (e) => {
+    if (e.target.files.length > 0) {
+      setavatar({
+        preview: URL.createObjectURL(e.target.files[0]),
+        data: e.target.files[0],
+      });
+    }
+  };
+
   /****************************** update Certificates **************************************/
   const [updateCertificatesModalOpen, setUpdateCertificatesModalOpen] =
     useState(false);
+  const [DeleteCertificatesModalOpen, setDeleteCertificatesModalOpen] =
+    useState(false);
+  const [deleteFileData, setDeleteFileData] = useState(null);
   const [files, setFiles] = useState([]);
-  const [avatar, setavatar] = useState(null);
-
-  const handleAvatar = (e) => {
-    const file = e.target.files[0];
-    const Reader = new FileReader();
-    Reader.readAsDataURL(file);
-
-    Reader.onload = () => {
-      setavatar(Reader?.result);
-    };
-  };
 
   const onNewFileAdd = (e) => {
-    const file = e.target.files[0];
-    const Reader = new FileReader();
-    Reader.readAsDataURL(file);
-
-    Reader.onload = () => {
-      setFiles([...files, Reader.result]);
-    };
+    if (e.target.files.length > 0) {
+      setFiles([
+        ...files,
+        {
+          preview: URL.createObjectURL(e.target.files[0]),
+          data: e.target.files[0],
+        },
+      ]);
+    }
   };
 
   const onFileDelete = (val) => {
-    setFiles(files.filter((item) => item != val));
+    setFiles(files.filter((item) => item?.data != val));
   };
 
   const onFilesUpdate = () => {
-    updateUserCertificates(token, { files })
+    const formData = new FormData();
+    for (let item of files) {
+      formData.append("imgFiles", item.data);
+    }
+
+    updateUserCertificates(token, formData)
       .then((response) => {
         if (response) {
           setUpdateCertificatesModalOpen(false);
+          dispatch(setUser(response));
+          setFiles([]);
+        }
+      })
+      .finally(() => {
+        // dispatch(loadingStop());
+      });
+  };
+
+  const DeleteCertificate = () => {
+    deleteCertificate(token, { file: deleteFileData })
+      .then((response) => {
+        if (response) {
+          setDeleteCertificatesModalOpen(false);
+          setDeleteFileData(null);
+          dispatch(setUser(response));
         }
       })
       .finally(() => {
@@ -118,6 +150,7 @@ const Login = () => {
       .then((response) => {
         if (response) {
           setUpdateSkillModalOpen(false);
+          dispatch(setUser(response));
         }
       })
       .finally(() => {
@@ -155,6 +188,10 @@ const Login = () => {
     handleAvatar,
     avatar,
     setavatar,
+    setDeleteCertificatesModalOpen,
+    DeleteCertificatesModalOpen,
+    setDeleteFileData,
+    DeleteCertificate,
   };
   return <Body {..._this} />;
 };

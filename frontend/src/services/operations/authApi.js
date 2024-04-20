@@ -11,6 +11,7 @@ const {
   LOGIN_API,
   UpdateProfile_API,
   OtherProfile_API,
+  DELETECERTIFICATE_API,
 } = authEndpoints;
 
 export function sendOtp(data, setOtpReceived, setFormValue) {
@@ -144,6 +145,7 @@ export const updateBioAndAvatar = async (token, data) => {
   let result = [];
   try {
     const response = await apiConnector("POST", UpdateProfile_API, data, {
+      "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     });
     if (response?.data?.error) {
@@ -166,6 +168,29 @@ export const updateUserCertificates = async (token, data) => {
   let result = [];
   try {
     const response = await apiConnector("POST", UpdateProfile_API, data, {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    });
+    if (response?.data?.error) {
+      throw new Error(response.data.error);
+    }
+
+    result = response?.data?.data;
+    localStorage.setItem("user", JSON.stringify(response)); // important
+    toast.success("Profile Updated");
+  } catch (error) {
+    console.log("Update certificates API ERROR............", error);
+    toast.error(error.message);
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
+export const deleteCertificate = async (token, data) => {
+  const toastId = toast.loading("Loading...");
+  let result = [];
+  try {
+    const response = await apiConnector("DELETE", DELETECERTIFICATE_API, data, {
       Authorization: `Bearer ${token}`,
     });
     if (response?.data?.error) {
@@ -174,9 +199,9 @@ export const updateUserCertificates = async (token, data) => {
 
     result = response?.data?.data;
     localStorage.setItem("user", JSON.stringify(response?.data?.data)); // important
-    toast.success("Profile Updated");
+    toast.success("Certificate Deleted");
   } catch (error) {
-    console.log("Update certificates API ERROR............", error);
+    console.log("delete certificates API ERROR............", error);
     toast.error(error.message);
   }
   toast.dismiss(toastId);

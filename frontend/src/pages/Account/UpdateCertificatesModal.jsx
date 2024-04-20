@@ -50,9 +50,9 @@ const UpdateCertificatesModal = ({ _this }) => {
                   key={index}
                   className="flex items-center text-gray-medium text-lg font-normal border border-grayMedium px-3 py-2 rounded-lg relative"
                 >
-                  <Image width={200} src={item} />
+                  <Image width={200} src={item?.preview} />
                   <MdOutlineCancel
-                    onClick={() => _this?.onFileDelete(item)}
+                    onClick={() => _this?.onFileDelete(item?.data)}
                     size={35}
                     className="ml-3 bg-white p-0.5 text-red absolute top-0 right-0 cursor-pointer rounded-full border border-grayMedium"
                   />

@@ -2,10 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Image, Input } from "antd";
 import { MdOutlineEdit } from "react-icons/md";
-import SmallHeader from "../../components/common/SmallHeader";
-
 import LoginImage from "../../assets/images/Login.jpg";
 import Navbar from "../../components/common/Navbar";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const LoginForm = ({ _this }) => {
   return (
@@ -19,7 +18,11 @@ const LoginForm = ({ _this }) => {
               <div className="flex items-stretch flex-col sm:items-center sm:flex-row gap-5 border border-grayLight rounded-lg p-3 relative">
                 <Avatar
                   className="h-32 w-32 border-0.5 border-gray-300"
-                  src={_this?.profileDetails?.avatar?.avatar_url ?? LoginImage}
+                  src={
+                    _this?.profileDetails?.avatar
+                      ? `${BASE_URL + _this.profileDetails?.avatar}`
+                      : LoginImage
+                  }
                 />
                 <div>
                   <h4 className="text-primary-text text-2xl font-bold text-wrap">
@@ -64,7 +67,11 @@ const LoginForm = ({ _this }) => {
                 <div className="flex flex-row items-center flex-wrap gap-2">
                   {_this?.profileDetails?.certificates?.length > 0 &&
                     _this?.profileDetails?.certificates.map((item, index) => (
-                      <Image key={index} width={100} src={item.avatar_url} />
+                      <Image
+                        key={index}
+                        width={100}
+                        src={`${BASE_URL + item?.img_url}`}
+                      />
                     ))}
                 </div>
               </div>

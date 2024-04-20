@@ -6,6 +6,7 @@ import {
   RegisterUser,
   SendOtp,
   UpdateProfile,
+  deleteCertificate,
   deleteProfile,
 } from "../controllers/userController.js";
 const router = Router();
@@ -18,6 +19,7 @@ router.post("/send-otp", SendOtp);
 //authentic routes
 router.post("/update", isAuthenticated, UpdateProfile);
 router.delete("/delete", isAuthenticated, deleteProfile);
+router.delete("/delete-certificate", isAuthenticated, deleteCertificate);
 router.post("/get-user", isAuthenticated, OtherProfile);
 
 export default router;

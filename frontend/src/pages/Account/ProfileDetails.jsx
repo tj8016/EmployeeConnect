@@ -1,13 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Image as AntdImg, Input } from "antd";
-import { MdOutlineEdit } from "react-icons/md";
-import SmallHeader from "../../components/common/SmallHeader";
-
+import { MdOutlineCancel, MdOutlineEdit } from "react-icons/md";
 import LoginImage from "../../assets/images/Login.jpg";
 import Navbar from "../../components/common/Navbar";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const LoginForm = ({ _this }) => {
+const ProfileDetails = ({ _this }) => {
   return (
     <>
       <Navbar />
@@ -19,7 +18,11 @@ const LoginForm = ({ _this }) => {
               <div className="flex items-stretch flex-col sm:items-center sm:flex-row gap-5 border border-grayLight rounded-lg p-3 relative">
                 <Avatar
                   className="h-32 w-32 border-0.5 border-gray-300"
-                  src={_this?.user?.avatar?.avatar_url ?? LoginImage}
+                  src={
+                    _this.user?.avatar
+                      ? `${BASE_URL + _this.user.avatar}`
+                      : LoginImage
+                  }
                 />
                 <div>
                   <h4 className="text-primary-text text-2xl font-bold text-wrap">
@@ -52,17 +55,20 @@ const LoginForm = ({ _this }) => {
                     onClick={(e) => {
                       e.preventDefault();
                       _this?.setUpdateSkillModalOpen(true);
-                      console.log("1st");
+                      _this?.setuserSkills(_this?.user?.skills);
                     }}
                     size={25}
                     className="cursor-pointer"
                   />
                 </div>
                 <div className="flex flex-row items-center flex-wrap gap-2">
-                  {_this?.user?.skills.length > 0 &&
-                    _this?.user?.skills.map((item) => (
-                      <h5 className="text-gray-medium text-lg font-normal border border-grayMedium px-3 py-2 rounded-lg">
-                        item
+                  {_this?.user?.skills?.length > 0 &&
+                    _this?.user?.skills.map((item, index) => (
+                      <h5
+                        key={index}
+                        className="text-gray-medium text-lg font-normal border border-grayMedium px-3 py-2 rounded-lg"
+                      >
+                        {item}
                       </h5>
                     ))}
                 </div>
@@ -84,43 +90,35 @@ const LoginForm = ({ _this }) => {
                   />
                 </div>
                 <div className="flex flex-row items-center flex-wrap gap-2">
-                  {_this?.user?.certificates.length > 0 &&
-                    _this?.user?.certificates.map((item) => (
-                      <h5 className="text-gray-medium text-lg font-normal border border-grayMedium px-3 py-2 rounded-lg">
-                        item
-                      </h5>
+                  {_this?.user?.certificates?.length > 0 &&
+                    _this?.user?.certificates.map((item, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center text-gray-medium text-lg font-normal border border-grayMedium px-3 py-2 rounded-lg relative"
+                      >
+                        <AntdImg
+                          src={`${BASE_URL + item?.img_url}`}
+                          width={150}
+                        />
+
+                        <MdOutlineCancel
+                          onClick={() => {
+                            _this.setDeleteFileData(item.img_url);
+                            _this.setDeleteCertificatesModalOpen(true);
+                          }}
+                          size={35}
+                          className="ml-3 bg-white p-0.5 text-red absolute top-0 right-0 cursor-pointer rounded-full border border-grayMedium"
+                        />
+                      </div>
                     ))}
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        {/* <div className="w-full bg-contactBg min-h-full lg:basis-1/3 p-8 lg:rounded-tl-5 lg:rounded-bl-5 flex flex-col justify-center">
-        
-        <div className="flex flex-col py-8 gap-2">
-          <div>
-            <h4 className="text-primary-text text-4xl font-bold mb-2">
-              Similar Profiles
-            </h4>
-            <h5 className="text-gray-medium text-lg font-normal">
-              Empowering professionals to showcase skills and celebrate
-              achievements effortlessly.
-            </h5>
-            <h5 className="text-gray-medium text-lg font-normal">
-              Empowering professionals to showcase skills and celebrate
-              achievements effortlessly.
-            </h5>
-            <h5 className="text-gray-medium text-lg font-normal">
-              Empowering professionals to showcase skills and celebrate
-              achievements effortlessly.
-            </h5>
-          </div>
-        </div>
-      </div> */}
       </div>
     </>
   );
 };
 
-export default LoginForm;
+export default ProfileDetails;

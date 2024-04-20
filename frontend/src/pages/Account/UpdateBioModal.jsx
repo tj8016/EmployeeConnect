@@ -35,7 +35,7 @@ const UpdateBioModal = ({ _this }) => {
 
           {_this?.avatar != null ? (
             <div className="w-40 flex items-center text-gray-medium text-lg font-normal border border-grayMedium px-3 py-2 rounded-lg relative">
-              <Image width={150} src={_this?.avatar} />
+              <Image width={150} src={_this?.avatar.preview} />
               <MdOutlineCancel
                 onClick={() => _this?.setavatar(null)}
                 size={35}
