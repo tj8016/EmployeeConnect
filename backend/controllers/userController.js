@@ -1,6 +1,7 @@
 import { DbPost } from "../models/post.js";
 import { DbUser } from "../models/user.js";
 import { DbOtp } from "../models/otp.js";
+import cloudinary from "cloudinary";
 import {
   HashPasswords,
   ResponseHandler,
@@ -169,19 +170,43 @@ export const UpdateProfile = async (req, res, next) => {
       last_name,
       email,
       skills = [],
-      certificates = [],
+      files = [],
       bio = "",
       avatar,
     } = req.body;
     const { _id } = req.user;
 
-    //find user and update
     const user = await DbUser.findOne({ _id });
+    //upload certificates
+    let newcertificates = user.certificates;
+    for (let item of files) {
+      let myCloud = await cloudinary.v2.uploader.upload(item, {
+        folder: "crud_users",
+      });
+      newcertificates = [
+        ...newcertificates,
+        {
+          public_id: myCloud.public_id,
+          avatar_url: myCloud.secure_url,
+        },
+      ];
+    }
+
+    //upload avatar
+    const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+      folder: "crud_users",
+    });
+    if (avatar)
+      user.avatar = {
+        public_id: myCloud.public_id,
+        avatar_url: myCloud.secure_url,
+      };
+
     if (first_name) user.first_name = first_name;
     if (last_name) user.last_name = last_name;
     if (email) user.email = email;
     if (skills.length) user.skills = skills;
-    if (certificates.length) user.certificates = certificates;
+    if (newcertificates.length) user.certificates = newcertificates;
     if (bio) user.bio = bio;
 
     await user.save();
@@ -202,6 +227,19 @@ export const deleteProfile = async (req, res, next) => {
     await DbUser.deleteOne({ _id });
 
     return ResponseHandler(res, 200, "Profile deleted !");
+  } catch (error) {
+    console.log("profile delete error ->", error);
+  }
+};
+
+/************************************* get other user profile  ***************************************/
+export const OtherProfile = async (req, res, next) => {
+  try {
+    const { id } = req.body;
+    const user = await DbUser.findOne({ _id: id });
+    if (!user) return ResponseErrorHandler(res, 202, "User not found !");
+
+    return ResponseHandler(res, 200, "profile found", user);
   } catch (error) {
     console.log("profile delete error ->", error);
   }
