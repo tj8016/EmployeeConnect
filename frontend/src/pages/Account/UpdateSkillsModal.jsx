@@ -17,7 +17,7 @@ const UpdateSkillsModal = ({ _this }) => {
         footer={
           <div>
             <button
-              onClick={_this?.onProfileUpdate()}
+              onClick={_this?.onSkillsUpdate}
               className="text-white bg-primary border-0 py-3 px-8 focus:outline-none hover:bg-primary-dark rounded-lg text-base font-semibold"
             >
               Save

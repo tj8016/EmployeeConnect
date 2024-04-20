@@ -5,7 +5,13 @@ import { setLoading, setToken } from "../../reducer/slices/authSlice";
 import { setUser } from "../../reducer/slices/profileSlice";
 import { ValidateEmail } from "../../utils";
 
-const { SEND_OTP_API, SIGNUP_API, LOGIN_API } = authEndpoints;
+const {
+  SEND_OTP_API,
+  SIGNUP_API,
+  LOGIN_API,
+  UpdateProfile_API,
+  OtherProfile_API,
+} = authEndpoints;
 
 export function sendOtp(data, setOtpReceived, setFormValue) {
   return async (dispatch) => {
@@ -109,3 +115,89 @@ export function logout(navigate) {
     navigate("/");
   };
 }
+
+export const getOtherProfile = async (token, data) => {
+  const toastId = toast.loading("Loading...");
+  let result = {};
+  try {
+    const response = await apiConnector("POST", OtherProfile_API, data, {
+      Authorization: `Bearer ${token}`,
+    });
+    if (response?.data?.error) {
+      throw new Error(response.data.error);
+    }
+
+    result = response?.data?.data;
+  } catch (error) {
+    console.log("get other profile API ERROR............", error);
+    toast.error(error.message);
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
+export const updateBioAndAvatar = async (token, data) => {
+  const toastId = toast.loading("Loading...");
+  let result = [];
+  try {
+    const response = await apiConnector("POST", UpdateProfile_API, data, {
+      Authorization: `Bearer ${token}`,
+    });
+    if (response?.data?.error) {
+      throw new Error(response.data.error);
+    }
+
+    result = response?.data?.data;
+    localStorage.setItem("user", JSON.stringify(response?.data?.data)); // important
+    toast.success("Profile Updated");
+  } catch (error) {
+    console.log("UpdateBio API ERROR............", error);
+    toast.error(error.message);
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
+export const updateUserCertificates = async (token, data) => {
+  const toastId = toast.loading("Loading...");
+  let result = [];
+  try {
+    const response = await apiConnector("POST", UpdateProfile_API, data, {
+      Authorization: `Bearer ${token}`,
+    });
+    if (response?.data?.error) {
+      throw new Error(response.data.error);
+    }
+
+    result = response?.data?.data;
+    localStorage.setItem("user", JSON.stringify(response?.data?.data)); // important
+    toast.success("Profile Updated");
+  } catch (error) {
+    console.log("Update certificates API ERROR............", error);
+    toast.error(error.message);
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
+export const updateUserSkills = async (token, data) => {
+  const toastId = toast.loading("Loading...");
+  let result = [];
+  try {
+    const response = await apiConnector("POST", UpdateProfile_API, data, {
+      Authorization: `Bearer ${token}`,
+    });
+    if (response?.data?.error) {
+      throw new Error(response.data.error);
+    }
+
+    result = response?.data?.data;
+    localStorage.setItem("user", JSON.stringify(response?.data?.data)); // important
+    toast.success("Profile Updated");
+  } catch (error) {
+    console.log("Update skills API ERROR............", error);
+    toast.error(error.message);
+  }
+  toast.dismiss(toastId);
+  return result;
+};

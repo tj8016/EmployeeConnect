@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import SingUp from "./pages/Signup";
 import Home from "./pages/Home";
 import Account from "./pages/Account";
+import OtherProfiles from "./pages/OtherProfiles";
 
 import PrivateRoutes from "./components/PrivateRoutes";
 import PublicRoutes from "./components/PublicRoutes";
@@ -43,6 +44,14 @@ const App = () => {
           element={
             <PrivateRoutes>
               <Account />
+            </PrivateRoutes>
+          }
+        />
+        <Route
+          path="/users/:id"
+          element={
+            <PrivateRoutes>
+              <OtherProfiles />
             </PrivateRoutes>
           }
         />
