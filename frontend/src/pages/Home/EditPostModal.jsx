@@ -1,23 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal, Input, Image } from "antd";
 import { RiImageAddLine } from "react-icons/ri";
 import { IoClose } from "react-icons/io5";
 
-const { TextArea } = Input;
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const AddPostModal = ({ _this }) => {
-  const handleCancel = () => {
-    _this?.setAddPostModal(false);
+const EditPostModal = ({ _this }) => {
+  const uploadImageFile = (e) => {
+    if (e.target.files.length > 0) {
+      _this?.setEditPostImageFile({
+        preview: URL.createObjectURL(e.target.files[0]),
+        data: e.target.files[0],
+      });
+    }
   };
   return (
     <>
       <Modal
         focus={false}
         centered={true}
-        title="Post"
+        title="Edit Post"
         width={700}
-        open={_this?.addPostModal}
-        onCancel={handleCancel}
+        open={_this?.editPostModal}
+        onCancel={() => _this?.setEditPostModal(false)}
         footer={
           <div class="flex items-center justify-between px-3 py-2 border-t pt-5">
             <div class="flex ps-0 space-x-1 rtl:space-x-reverse sm:ps-2">
@@ -32,14 +37,14 @@ const AddPostModal = ({ _this }) => {
                 type="file"
                 accept="image/x-png,image/gif,image/jpeg"
                 class="hidden justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-primary hover:bg-primary/10"
-                onChange={_this?.uploadImageFile}
+                onChange={uploadImageFile}
               />
             </div>
             <button
-              onClick={_this?.createPostSubmit}
+              onClick={_this?.updatePostSubmit}
               className="text-white bg-primary border-0 py-2 px-8 focus:outline-none hover:bg-primary-dark rounded-lg text-base font-semibold"
             >
-              Post
+              Save
             </button>
           </div>
         }
@@ -53,9 +58,9 @@ const AddPostModal = ({ _this }) => {
               id="caption"
               class="w-full px-0 text-sm border-0 focus:ring-0 outline-none"
               placeholder="Write you caption..."
-              value={_this?.postData.caption}
+              value={_this?.editPostData?.caption}
               onChange={(e) => {
-                _this.setPostData((prev) => ({
+                _this.setEditPostData((prev) => ({
                   ...prev,
                   caption: e.target.value,
                 }));
@@ -63,17 +68,21 @@ const AddPostModal = ({ _this }) => {
             ></textarea>
           </div>
           <div>
-            {_this.postImageFile !== null && (
-              <div className="relative group flex justify-center">
-                <IoClose
-                  onClick={() => _this?.setPostImageFile(null)}
-                  className="absolute cursor-pointer z-40 text-xl text-white right-5 top-5 invisible group-hover:visible"
-                />
-                <Image
-                  width={700}
-                  src={_this?.postImageFile.preview}
-                  className="border"
-                />
+            {_this.editPostImageFile !== null && (
+              <div className="flex justify-center">
+                {_this?.editPostImageFile.preview ? (
+                  <Image
+                    width={700}
+                    src={`${_this?.editPostImageFile.preview}`}
+                    className="border"
+                  />
+                ) : (
+                  <Image
+                    width={700}
+                    src={`${BASE_URL + _this?.editPostImageFile}`}
+                    className="border"
+                  />
+                )}
               </div>
             )}
           </div>
@@ -83,4 +92,4 @@ const AddPostModal = ({ _this }) => {
   );
 };
 
-export default AddPostModal;
+export default EditPostModal;

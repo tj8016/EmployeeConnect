@@ -4,6 +4,7 @@ import Posts from "./Posts";
 import AddPost from "./AddPost";
 import AddPostModal from "./AddPostModal";
 import DeletePostModal from "./DeletePostModal";
+import EditPostModal from "./EditPostModal";
 
 const Body = (_this) => {
   return (
@@ -28,6 +29,7 @@ const Body = (_this) => {
         </div>
         {_this.addPostModal && <AddPostModal _this={_this} />}
         {_this.deletePostModal && <DeletePostModal _this={_this} />}
+        {_this.editPostModal && <EditPostModal _this={_this} />}
       </div>
     </>
   );

@@ -2,7 +2,13 @@ import toast from "react-hot-toast";
 import { postEndpoints } from "../apis";
 import { apiConnector } from "../apiConnector";
 
-const { CREATE_POST_API, GET_ALL_POST_API, DELETE_POST_API } = postEndpoints;
+const {
+  CREATE_POST_API,
+  UPDATE_POST_API,
+  GET_ALL_POST_API,
+  DELETE_POST_API,
+  ADD_REMOVE_LIKE_API,
+} = postEndpoints;
 
 export const getAllPost = async () => {
   let result = [];
@@ -39,6 +45,27 @@ export const createPost = async (data, token) => {
   return result;
 };
 
+export const updatePost = async (data, token) => {
+  let result = null;
+  const toastId = toast.loading("Loading...");
+  try {
+    const response = await apiConnector("POST", UPDATE_POST_API, data, {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    });
+    if (response?.data?.error) {
+      toast.dismiss(toastId);
+      return toast.error(response?.data?.error);
+    }
+    toast.success("Post Updated");
+    result = response?.data;
+  } catch (error) {
+    console.log("UPDATE_POST_API ERROR............", error);
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
 export const deletePost = async (data, token) => {
   const toastId = toast.loading("Loading...");
   let result = null;
@@ -58,4 +85,19 @@ export const deletePost = async (data, token) => {
   }
   toast.dismiss(toastId);
   return result;
+};
+
+export const addOrRemoveLike = async (data, token) => {
+  try {
+    const response = await apiConnector("PUT", ADD_REMOVE_LIKE_API, data, {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    });
+    console.log(response);
+    if (response?.data?.error) {
+      return toast.error(response?.data?.error);
+    }
+  } catch (error) {
+    console.log("ADD_REMOVE_LIKE_API ERROR............", error);
+  }
 };

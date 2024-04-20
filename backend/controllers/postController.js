@@ -67,6 +67,30 @@ export const UpdatePost = async (req, res, next) => {
     if (!post) return ResponseHandler(res, 404, "Post not found.");
     if (caption) post.caption = caption;
 
+    const postImageFile = req.files?.postImageFile;
+
+    let storedUrl = null;
+    if (postImageFile) {
+      // Delete existing image from db
+      if (post?.image_url !== "") {
+        const deleteImage = ImageDeleter(post.image_url);
+        if (!deleteImage)
+          return ResponseErrorHandler(
+            res,
+            202,
+            "Existing image file not Deleted."
+          );
+      }
+
+      // Upload image on db
+      storedUrl = ImageUploader("/uploads/postsImage/", postImageFile);
+
+      if (!storedUrl) {
+        return ResponseErrorHandler(res, 202, "Failed to Upload Image.");
+      }
+      post.image_url = storedUrl;
+    }
+
     await post.save();
 
     ResponseHandler(res, 200, "Updated post", post);
@@ -84,9 +108,15 @@ export const DeletePost = async (req, res, next) => {
     if (!post) return ResponseErrorHandler(res, 404, "Post not found.");
 
     // delete image file
-    const deleteImage = ImageDeleter(post.image_url);
-    if (!deleteImage)
-      return ResponseErrorHandler(res, 202, "Existing image file not Deleted.");
+    if (post?.image_url !== "") {
+      const deleteImage = ImageDeleter(post.image_url);
+      if (!deleteImage)
+        return ResponseErrorHandler(
+          res,
+          202,
+          "Existing image file not Deleted."
+        );
+    }
 
     //delte the specific entry
     await DbPost.deleteOne({ _id: post_id });

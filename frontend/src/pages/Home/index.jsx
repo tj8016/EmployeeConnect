@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import Body from "./Body";
 import Navbar from "../../components/common/Navbar";
@@ -6,6 +7,8 @@ import {
   createPost,
   deletePost,
   getAllPost,
+  updatePost,
+  addOrRemoveLike,
 } from "../../services/operations/postApi";
 
 const Home = () => {
@@ -13,12 +16,19 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [allPostData, setAllPostData] = useState([]);
   const [addPostModal, setAddPostModal] = useState(false);
+  const [editPostModal, setEditPostModal] = useState(false);
   const [deletePostModal, setDeletePostModal] = useState(false);
   const [deletePostData, setDeletePostData] = useState(null);
   const [postData, setPostData] = useState({
     caption: "",
   });
   const [postImageFile, setPostImageFile] = useState(null);
+
+  const [editPostData, setEditPostData] = useState({
+    _id: "",
+    caption: "",
+  });
+  const [editPostImageFile, setEditPostImageFile] = useState(null);
 
   const uploadImageFile = (e) => {
     if (e.target.files.length > 0) {
@@ -30,6 +40,8 @@ const Home = () => {
   };
 
   const createPostSubmit = async () => {
+    if (postData?.caption === "" && postImageFile === null)
+      return toast.error("Add something to post");
     const formData = new FormData();
     formData.append("caption", postData.caption);
     if (postImageFile !== null) {
@@ -43,6 +55,25 @@ const Home = () => {
       });
       setPostImageFile(null);
       setAddPostModal(false);
+      getAllPostFunc();
+    }
+  };
+
+  const updatePostSubmit = async () => {
+    const formData = new FormData();
+    formData.append("post_id", editPostData._id);
+    formData.append("caption", editPostData.caption);
+    if (editPostImageFile?.data) {
+      formData.append("postImageFile", editPostImageFile.data);
+    }
+
+    const result = await updatePost(formData, token);
+    if (result !== null) {
+      setEditPostData({
+        caption: "",
+      });
+      setEditPostImageFile(null);
+      setEditPostModal(false);
       getAllPostFunc();
     }
   };
@@ -76,6 +107,14 @@ const Home = () => {
     setLoading(false);
   };
 
+  const addOrRemoveLikeFunc = async (post_id) => {
+    const data = {
+      post_id: post_id,
+    };
+    const res = await addOrRemoveLike(data, token);
+    getAllPostFunc();
+  };
+
   useEffect(() => {
     getAllPostFunc();
   }, []);
@@ -85,6 +124,12 @@ const Home = () => {
     setAllPostData,
     addPostModal,
     setAddPostModal,
+    editPostModal,
+    setEditPostModal,
+    editPostData,
+    setEditPostData,
+    editPostImageFile,
+    setEditPostImageFile,
     deletePostModal,
     setDeletePostModal,
     deletePostData,
@@ -95,7 +140,9 @@ const Home = () => {
     setPostImageFile,
     uploadImageFile,
     createPostSubmit,
+    updatePostSubmit,
     deletePostSubmit,
+    addOrRemoveLikeFunc,
   };
   return (
     <>

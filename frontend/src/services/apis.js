@@ -9,6 +9,8 @@ export const authEndpoints = {
 
 export const postEndpoints = {
   CREATE_POST_API: BASE_URL + "/api/v1/post/create-post",
+  UPDATE_POST_API: BASE_URL + "/api/v1/post/update-post",
   GET_ALL_POST_API: BASE_URL + "/api/v1/post/get-all-post",
   DELETE_POST_API: BASE_URL + "/api/v1/post/delete-post",
+  ADD_REMOVE_LIKE_API: BASE_URL + "/api/v1/post/like-or-unlike-a-post",
 };
