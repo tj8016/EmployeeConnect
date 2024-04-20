@@ -12,7 +12,7 @@ import PublicRoutes from "./components/PublicRoutes";
 
 const App = () => {
   return (
-    <div className="flex min-h-screen max-w-screen scroll-smooth flex-col">
+    <div className="flex min-h-screen max-w-screen scroll-smooth flex-col ">
       <Routes>
         <Route
           path="/login"

@@ -29,6 +29,7 @@ const AddPostModal = ({ _this }) => {
               <input
                 id="imageInput"
                 type="file"
+                accept="image/x-png,image/gif,image/jpeg"
                 class="hidden justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-primary hover:bg-primary/10"
                 onChange={_this?.uploadImageFile}
               />

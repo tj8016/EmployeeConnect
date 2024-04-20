@@ -2,13 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Body from "./Body";
 import Navbar from "../../components/common/Navbar";
-import { createPost, getAllPost } from "../../services/operations/postApi";
+import {
+  createPost,
+  deletePost,
+  getAllPost,
+} from "../../services/operations/postApi";
 
 const Home = () => {
   const { token } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
   const [allPostData, setAllPostData] = useState([]);
   const [addPostModal, setAddPostModal] = useState(false);
+  const [deletePostModal, setDeletePostModal] = useState(false);
+  const [deletePostData, setDeletePostData] = useState(null);
   const [postData, setPostData] = useState({
     caption: "",
   });
@@ -52,6 +58,24 @@ const Home = () => {
     setLoading(false);
   };
 
+  const deletePostSubmit = async () => {
+    setLoading(true);
+    try {
+      const data = {
+        post_id: deletePostData?._id,
+      };
+      const result = await deletePost(data, token);
+      if (result !== null) {
+        setDeletePostData(false);
+        setDeletePostModal(false);
+        getAllPostFunc();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
     getAllPostFunc();
   }, []);
@@ -61,17 +85,22 @@ const Home = () => {
     setAllPostData,
     addPostModal,
     setAddPostModal,
+    deletePostModal,
+    setDeletePostModal,
+    deletePostData,
+    setDeletePostData,
     postData,
     setPostData,
     postImageFile,
     setPostImageFile,
     uploadImageFile,
     createPostSubmit,
+    deletePostSubmit,
   };
   return (
     <>
       <Navbar />
-      <div className={`mt-[40px]`}>
+      <div className={`mt-[5px] pt-[30px] bg-black/5`}>
         <Body {..._this} />
       </div>
     </>

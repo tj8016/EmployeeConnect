@@ -10,4 +10,5 @@ export const authEndpoints = {
 export const postEndpoints = {
   CREATE_POST_API: BASE_URL + "/api/v1/post/create-post",
   GET_ALL_POST_API: BASE_URL + "/api/v1/post/get-all-post",
+  DELETE_POST_API: BASE_URL + "/api/v1/post/delete-post",
 };

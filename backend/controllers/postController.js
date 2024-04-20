@@ -1,6 +1,6 @@
 import { DbPost } from "../models/post.js";
 import { DbUser } from "../models/user.js";
-import { ImageUploader } from "../utils/imageUploader.js";
+import { ImageDeleter, ImageUploader } from "../utils/imageUploader.js";
 import { ResponseErrorHandler, ResponseHandler } from "../utils/index.js";
 import cloudinary from "cloudinary";
 
@@ -81,14 +81,24 @@ export const DeletePost = async (req, res, next) => {
     const { post_id } = req.body;
 
     const post = await DbPost.findOne({ _id: post_id });
-    if (!post) return ResponseHandler(res, 404, "Post not found.");
+    if (!post) return ResponseErrorHandler(res, 404, "Post not found.");
+
+    // delete image file
+    const deleteImage = ImageDeleter(post.image_url);
+    if (!deleteImage)
+      return ResponseErrorHandler(res, 202, "Existing image file not Deleted.");
 
     //delte the specific entry
     await DbPost.deleteOne({ _id: post_id });
 
     //remove from user's exepnse array
     const user = req.user;
-    await DbUser.updateOne({ _id: user._id }, { $pull: { posts: post_id } });
+    const deletePost = await DbUser.updateOne(
+      { _id: user._id },
+      { $pull: { posts: post_id } }
+    );
+
+    if (!deletePost) return ResponseErrorHandler(res, 202, "Post not Deleted.");
 
     ResponseHandler(res, 200, "deleted post");
   } catch (error) {
