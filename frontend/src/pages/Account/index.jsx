@@ -51,11 +51,11 @@ const Login = () => {
     const formData = new FormData();
     formData.append("avatar", avatar?.data);
     formData.append("bio", userBio);
-    formData.append("oldpic", user?.avatar);
     updateBioAndAvatar(token, formData)
       .then((response) => {
         if (response) {
           setUpdateBioModalOpen(false);
+          setavatar(null);
           dispatch(setUser(response));
         }
       })
@@ -100,7 +100,7 @@ const Login = () => {
   const onFilesUpdate = () => {
     const formData = new FormData();
     for (let item of files) {
-      formData.append("imgFiles", item.data);
+      formData.append("certificatesFiles", item.data);
     }
 
     updateUserCertificates(token, formData)

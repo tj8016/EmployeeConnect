@@ -166,18 +166,16 @@ export const SendOtp = async (req, res, next) => {
 export const UpdateProfile = async (req, res, next) => {
   try {
     //**avatar update will be implemented later
-    const { first_name, last_name, email, skills = [] } = req.body;
+    const { first_name, last_name, bio = "", email, skills = [] } = req.body;
     const { _id } = req.user;
 
-    const files = req.files?.imgFiles;
+    const files = req.files?.certificatesFiles;
     const avatar = req.files?.avatar;
-    const oldpic = req.files?.oldpic;
-    const bio = req.files?.bio;
 
     const user = await DbUser.findOne({ _id });
     //upload certificates
     let newcertificates = user.certificates;
-    if (files?.length)
+    if (files?.length) {
       for (let item of files) {
         let storedUrl = ImageUploader("/uploads/certificates/", item);
         newcertificates = [
@@ -187,21 +185,30 @@ export const UpdateProfile = async (req, res, next) => {
           },
         ];
       }
+    }
 
     //upload avatar
     if (avatar) {
+      // delete existing image if exist
+      if (user?.avatar !== "") {
+        const deleteImage = ImageDeleter(user?.avatar);
+        if (!deleteImage)
+          return ResponseErrorHandler(
+            res,
+            202,
+            "Existing image file not Deleted."
+          );
+      }
       let storedUrl = ImageUploader("/uploads/avatars/", avatar);
       user.avatar = storedUrl;
     }
 
-    if (oldpic) ImageDeleter(oldpic);
-
     if (first_name) user.first_name = first_name;
     if (last_name) user.last_name = last_name;
     if (email) user.email = email;
-    if (skills.length) user.skills = skills;
-    if (newcertificates.length) user.certificates = newcertificates;
     if (bio) user.bio = bio;
+    if (skills) user.skills = skills;
+    if (newcertificates.length) user.certificates = newcertificates;
 
     await user.save();
 

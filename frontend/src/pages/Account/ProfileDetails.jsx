@@ -62,6 +62,11 @@ const ProfileDetails = ({ _this }) => {
                   />
                 </div>
                 <div className="flex flex-row items-center flex-wrap gap-2">
+                  {_this?.user?.skills?.length === 0 && (
+                    <div className="w-full flex justify-center">
+                      <p className="py-6">No skills added yet</p>
+                    </div>
+                  )}
                   {_this?.user?.skills?.length > 0 &&
                     _this?.user?.skills.map((item, index) => (
                       <h5

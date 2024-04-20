@@ -153,7 +153,10 @@ export const updateBioAndAvatar = async (token, data) => {
     }
 
     result = response?.data?.data;
-    localStorage.setItem("user", JSON.stringify(response?.data?.data)); // important
+    localStorage.setItem(
+      "EmployeConnect-user",
+      JSON.stringify(response?.data?.data)
+    ); // important
     toast.success("Profile Updated");
   } catch (error) {
     console.log("UpdateBio API ERROR............", error);
@@ -176,7 +179,7 @@ export const updateUserCertificates = async (token, data) => {
     }
 
     result = response?.data?.data;
-    localStorage.setItem("user", JSON.stringify(response)); // important
+    localStorage.setItem("EmployeConnect-user", JSON.stringify(result)); // important
     toast.success("Profile Updated");
   } catch (error) {
     console.log("Update certificates API ERROR............", error);
@@ -198,7 +201,10 @@ export const deleteCertificate = async (token, data) => {
     }
 
     result = response?.data?.data;
-    localStorage.setItem("user", JSON.stringify(response?.data?.data)); // important
+    localStorage.setItem(
+      "EmployeConnect-user",
+      JSON.stringify(response?.data?.data)
+    ); // important
     toast.success("Certificate Deleted");
   } catch (error) {
     console.log("delete certificates API ERROR............", error);
@@ -220,7 +226,7 @@ export const updateUserSkills = async (token, data) => {
     }
 
     result = response?.data?.data;
-    localStorage.setItem("user", JSON.stringify(response?.data?.data)); // important
+    localStorage.setItem("EmployeConnect-user", JSON.stringify(result)); // important
     toast.success("Profile Updated");
   } catch (error) {
     console.log("Update skills API ERROR............", error);
