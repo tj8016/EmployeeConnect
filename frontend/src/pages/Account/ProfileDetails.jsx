@@ -56,7 +56,7 @@ const LoginForm = ({ _this }) => {
                   />
                 </div>
                 <div className="flex flex-row items-center flex-wrap gap-2">
-                  {_this?.user?.skills.length > 0 &&
+                  {_this?.user?.skills?.length > 0 &&
                     _this?.user?.skills.map((item) => (
                       <h5 className="text-gray-medium text-lg font-normal border border-grayMedium px-3 py-2 rounded-lg">
                         item
@@ -81,7 +81,7 @@ const LoginForm = ({ _this }) => {
                   />
                 </div>
                 <div className="flex flex-row items-center flex-wrap gap-2">
-                  {_this?.user?.certificates.length > 0 &&
+                  {_this?.user?.certificates?.length > 0 &&
                     _this?.user?.certificates.map((item) => (
                       <h5 className="text-gray-medium text-lg font-normal border border-grayMedium px-3 py-2 rounded-lg">
                         item

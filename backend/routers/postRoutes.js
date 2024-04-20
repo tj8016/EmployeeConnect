@@ -5,11 +5,13 @@ import {
   CreatePost,
   DeleteCommentInAPost,
   DeletePost,
+  GetAllPost,
   UpdatePost,
   WriteCommentInAPost,
 } from "../controllers/postController.js";
 const router = Router();
 
+router.get("/get-all-post", GetAllPost);
 router.post("/create-post", isAuthenticated, CreatePost);
 router.post("/update-post", isAuthenticated, UpdatePost);
 router.delete("/delete-post", isAuthenticated, DeletePost);

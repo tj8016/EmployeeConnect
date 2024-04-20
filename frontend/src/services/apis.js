@@ -6,3 +6,8 @@ export const authEndpoints = {
   SIGNUP_API: BASE_URL + "/api/v1/user/register",
   LOGIN_API: BASE_URL + "/api/v1/user/login",
 };
+
+export const postEndpoints = {
+  CREATE_POST_API: BASE_URL + "/api/v1/post/create-post",
+  GET_ALL_POST_API: BASE_URL + "/api/v1/post/get-all-post",
+};
