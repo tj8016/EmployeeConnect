@@ -13,7 +13,7 @@ const Navbar = () => {
 
   return (
     <div className="flex w-full justify-center items-center z-[100] mb-16">
-      <div className="w-full h-[65px] md:h-[70px] fixed top-0 bg-white shadow flex items-center justify-center">
+      <div className="w-full h-[70px] fixed top-0 bg-white shadow flex items-center justify-center">
         <div className=" flex w-11/12 sm:w-10/12 md:w-8/12 items-center justify-between md:justify-between">
           {/* Image */}
           <Link to="/">

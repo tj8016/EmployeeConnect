@@ -60,12 +60,9 @@ const LoginForm = ({ _this }) => {
                 </div>
                 <div className="flex flex-row items-center flex-wrap gap-2">
                   {_this?.user?.skills.length > 0 &&
-                    _this?.user?.skills.map((item, index) => (
-                      <h5
-                        key={index}
-                        className="text-gray-medium text-lg font-normal border border-grayMedium px-3 py-2 rounded-lg"
-                      >
-                        {item}
+                    _this?.user?.skills.map((item) => (
+                      <h5 className="text-gray-medium text-lg font-normal border border-grayMedium px-3 py-2 rounded-lg">
+                        item
                       </h5>
                     ))}
                 </div>
@@ -87,9 +84,11 @@ const LoginForm = ({ _this }) => {
                   />
                 </div>
                 <div className="flex flex-row items-center flex-wrap gap-2">
-                  {_this?.user?.certificates?.length > 0 &&
-                    _this?.user?.certificates.map((item, index) => (
-                      <AntdImg key={index} width={100} src={item.avatar_url} />
+                  {_this?.user?.certificates.length > 0 &&
+                    _this?.user?.certificates.map((item) => (
+                      <h5 className="text-gray-medium text-lg font-normal border border-grayMedium px-3 py-2 rounded-lg">
+                        item
+                      </h5>
                     ))}
                 </div>
               </div>

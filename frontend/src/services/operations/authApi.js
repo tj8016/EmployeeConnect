@@ -90,10 +90,13 @@ export function login(data, navigate) {
       dispatch(setToken(response?.data?.data?.token));
       dispatch(setUser({ ...response?.data?.data }));
       localStorage.setItem(
-        "token",
+        "EmployeConnect-token",
         JSON.stringify(response?.data?.data?.token)
       );
-      localStorage.setItem("user", JSON.stringify(response?.data?.data)); // important
+      localStorage.setItem(
+        "EmployeConnect-user",
+        JSON.stringify(response?.data?.data)
+      ); // important
       toast.success("Login Successful");
       navigate("/");
     } catch (error) {

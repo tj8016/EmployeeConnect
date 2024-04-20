@@ -4,11 +4,9 @@ const expenseSchema = new mongoose.Schema(
   {
     caption: {
       type: String,
-      required: [true, "caption is required!"],
     },
-    image: {
-      public_id: String,
-      image_url: String,
+    image_url: {
+      type: String,
     },
     owner: {
       type: mongoose.Schema.ObjectId,

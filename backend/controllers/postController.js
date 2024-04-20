@@ -1,32 +1,59 @@
 import { DbPost } from "../models/post.js";
 import { DbUser } from "../models/user.js";
-import { ResponseHandler } from "../utils/index.js";
+import { ImageDeleter, ImageUploader } from "../utils/imageUploader.js";
+import { ResponseErrorHandler, ResponseHandler } from "../utils/index.js";
 import cloudinary from "cloudinary";
 
 /************************************* create post ***************************************/
+export const GetAllPost = async (req, res, next) => {
+  try {
+    let post = await DbPost.find().sort({ _id: -1 }).populate("owner");
+
+    if (!post) return ResponseErrorHandler(res, 202, "Failed to get all post");
+
+    return ResponseHandler(res, 200, "", post);
+  } catch (error) {
+    ResponseErrorHandler(res, 202, "Failed to get Post.");
+    console.log("create post error ->", error);
+  }
+};
+/************************************* create post ***************************************/
 export const CreatePost = async (req, res, next) => {
   try {
-    const { caption, image } = req.body;
-    // let myCloud = await cloudinary.v2.uploader.upload(image, {
-    //   folder: "connectify",
-    // });
+    const { caption = "" } = req.body;
+    const postImageFile = req.files?.postImageFile;
     const { _id } = req.user;
 
-    const post = await DbPost.create({
-      caption,
-      image: {
-        public_id: "myCloud.public_id",
-        image_url: "myCloud.secure_url",
-      },
-      owner: _id,
-    });
+    let storedUrl = null;
+    let post = null;
+    if (postImageFile !== undefined) {
+      // Upload image on db
+      storedUrl = ImageUploader("/uploads/postsImage/", postImageFile);
 
-    if (!post) return ResponseHandler(res, 400, "Failed to create post");
+      if (!storedUrl) {
+        return ResponseErrorHandler(res, 202, "Failed to Upload Image.");
+      }
+
+      post = await DbPost.create({
+        caption,
+        image_url: storedUrl,
+        owner: _id,
+      });
+    } else {
+      post = await DbPost.create({
+        caption,
+        image_url: "",
+        owner: _id,
+      });
+    }
+
+    if (!post) return ResponseErrorHandler(res, 202, "Failed to create post");
     //also save it to user doc
     await DbUser.updateOne({ _id }, { $push: { posts: post } });
 
     return ResponseHandler(res, 200, "Post Created", post);
   } catch (error) {
+    ResponseErrorHandler(res, 202, "Failed to Create Post.");
     console.log("create post error ->", error);
   }
 };
@@ -54,14 +81,24 @@ export const DeletePost = async (req, res, next) => {
     const { post_id } = req.body;
 
     const post = await DbPost.findOne({ _id: post_id });
-    if (!post) return ResponseHandler(res, 404, "Post not found.");
+    if (!post) return ResponseErrorHandler(res, 404, "Post not found.");
+
+    // delete image file
+    const deleteImage = ImageDeleter(post.image_url);
+    if (!deleteImage)
+      return ResponseErrorHandler(res, 202, "Existing image file not Deleted.");
 
     //delte the specific entry
     await DbPost.deleteOne({ _id: post_id });
 
     //remove from user's exepnse array
     const user = req.user;
-    await DbUser.updateOne({ _id: user._id }, { $pull: { posts: post_id } });
+    const deletePost = await DbUser.updateOne(
+      { _id: user._id },
+      { $pull: { posts: post_id } }
+    );
+
+    if (!deletePost) return ResponseErrorHandler(res, 202, "Post not Deleted.");
 
     ResponseHandler(res, 200, "deleted post");
   } catch (error) {

@@ -5,8 +5,8 @@ const initialState = {
   sidebar: false,
   signupData: null,
   loading: false,
-  token: localStorage.getItem("token")
-    ? JSON.parse(localStorage.getItem("token"))
+  token: localStorage.getItem("EmployeConnect-token")
+    ? JSON.parse(localStorage.getItem("EmployeConnect-token"))
     : null,
 };
 

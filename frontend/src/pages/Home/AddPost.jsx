@@ -1,14 +1,8 @@
 import React from "react";
-import {
-  EditOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
-import { AiFillLike, AiOutlineLike } from "react-icons/ai";
-import { Avatar, Card, Image } from "antd";
+import { Avatar, Card } from "antd";
 const { Meta } = Card;
 
-const AddPost = () => {
+const AddPost = ({ _this }) => {
   return (
     <Card>
       <Meta
@@ -27,9 +21,15 @@ const AddPost = () => {
                 src="https://res.cloudinary.com/dbvdqcii9/image/upload/v1692768405/My%20Portfolio/aboutimg_je6vny.jpg"
               />
             </div>
-            <div className="w-full h-full text-sm font-light py-2 px-3 border rounded-full cursor-pointer hover:bg-black/5">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                _this?.setAddPostModal(true);
+              }}
+              className="w-full h-full text-sm font-light py-2 px-3 border rounded-full cursor-pointer hover:bg-black/5"
+            >
               Start Posts
-            </div>
+            </button>
           </div>
         }
       />
