@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Avatar, Image as AntdImg, Input } from "antd";
-import { MdOutlineCancel, MdOutlineEdit } from "react-icons/md";
+import { Avatar, Image, Input } from "antd";
+import { MdOutlineEdit } from "react-icons/md";
 import LoginImage from "../../assets/images/Login.jpg";
 import Navbar from "../../components/common/Navbar";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const ProfileDetails = ({ _this }) => {
+const LoginForm = ({ _this }) => {
   return (
     <>
       <Navbar />
@@ -19,31 +19,23 @@ const ProfileDetails = ({ _this }) => {
                 <Avatar
                   className="h-32 w-32 border-0.5 border-gray-300"
                   src={
-                    _this.user?.avatar
-                      ? `${BASE_URL + _this.user.avatar}`
+                    _this?.profileDetails?.avatar
+                      ? `${BASE_URL + _this.profileDetails?.avatar}`
                       : LoginImage
                   }
                 />
                 <div>
                   <h4 className="text-primary-text text-2xl font-bold text-wrap">
-                    {_this?.user?.first_name} {_this?.user?.last_name}
+                    {_this?.profileDetails?.first_name}{" "}
+                    {_this?.profileDetails?.last_name}
                   </h4>
                   <h5 className="text-gray-medium text-lg font-normal py-1 break-all">
-                    {_this?.user?.email}
+                    {_this?.profileDetails?.email}
                   </h5>
                   <h5 className="text-gray-medium text-lg font-normal">
-                    {_this?.user?.bio}
+                    {_this?.profileDetails?.bio}
                   </h5>
                 </div>
-                <MdOutlineEdit
-                  onClick={(e) => {
-                    e.preventDefault();
-                    _this?.setUpdateBioModalOpen(true);
-                    _this?.setUserBio(_this?.user?.bio);
-                  }}
-                  size={25}
-                  className="absolute top-4 right-4 cursor-pointer"
-                />
               </div>
               {/* skills section */}
               <div className="p-3 border border-grayLight rounded-lg">
@@ -51,19 +43,10 @@ const ProfileDetails = ({ _this }) => {
                   <h4 className="text-primary-text text-2xl font-bold mb-2">
                     Skills
                   </h4>
-                  <MdOutlineEdit
-                    onClick={(e) => {
-                      e.preventDefault();
-                      _this?.setUpdateSkillModalOpen(true);
-                      _this?.setuserSkills(_this?.user?.skills);
-                    }}
-                    size={25}
-                    className="cursor-pointer"
-                  />
                 </div>
                 <div className="flex flex-row items-center flex-wrap gap-2">
-                  {_this?.user?.skills?.length > 0 &&
-                    _this?.user?.skills.map((item, index) => (
+                  {_this?.profileDetails?.skills?.length > 0 &&
+                    _this?.profileDetails?.skills.map((item, index) => (
                       <h5
                         key={index}
                         className="text-gray-medium text-lg font-normal border border-grayMedium px-3 py-2 rounded-lg"
@@ -80,36 +63,15 @@ const ProfileDetails = ({ _this }) => {
                   <h4 className="text-primary-text text-2xl font-bold mb-2">
                     Certificates
                   </h4>
-                  <MdOutlineEdit
-                    onClick={(e) => {
-                      e.preventDefault();
-                      _this?.setUpdateCertificatesModalOpen(true);
-                    }}
-                    size={25}
-                    className="cursor-pointer"
-                  />
                 </div>
                 <div className="flex flex-row items-center flex-wrap gap-2">
-                  {_this?.user?.certificates?.length > 0 &&
-                    _this?.user?.certificates.map((item, index) => (
-                      <div
+                  {_this?.profileDetails?.certificates?.length > 0 &&
+                    _this?.profileDetails?.certificates.map((item, index) => (
+                      <Image
                         key={index}
-                        className="flex items-center text-gray-medium text-lg font-normal border border-grayMedium px-3 py-2 rounded-lg relative"
-                      >
-                        <AntdImg
-                          src={`${BASE_URL + item?.img_url}`}
-                          width={150}
-                        />
-
-                        <MdOutlineCancel
-                          onClick={() => {
-                            _this.setDeleteFileData(item.img_url);
-                            _this.setDeleteCertificatesModalOpen(true);
-                          }}
-                          size={35}
-                          className="ml-3 bg-white p-0.5 text-red absolute top-0 right-0 cursor-pointer rounded-full border border-grayMedium"
-                        />
-                      </div>
+                        width={100}
+                        src={`${BASE_URL + item?.img_url}`}
+                      />
                     ))}
                 </div>
               </div>
@@ -121,4 +83,4 @@ const ProfileDetails = ({ _this }) => {
   );
 };
 
-export default ProfileDetails;
+export default LoginForm;
