@@ -16,7 +16,6 @@ const Login = () => {
   const [profileDetails, setProfileDetails] = useState({});
   const [loading, setLoading] = useState(false);
 
-  console.log("pro", profileDetails);
   const onGetProfileDetails = () => {
     setLoading(true);
     getOtherProfile(token, { id: params.id })

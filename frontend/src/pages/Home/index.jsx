@@ -11,6 +11,7 @@ import {
   addOrRemoveLike,
   addComment,
 } from "../../services/operations/postApi";
+import { getAllUser } from "../../services/operations/authApi";
 
 const Home = () => {
   const { token } = useSelector((state) => state.auth);
@@ -35,6 +36,9 @@ const Home = () => {
     caption: "",
   });
   const [editPostImageFile, setEditPostImageFile] = useState(null);
+  const [allUsersData, setAllUsersData] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
+  const [inputValue, setInputValue] = useState("");
 
   const uploadImageFile = (e) => {
     if (e.target.files.length > 0) {
@@ -122,6 +126,7 @@ const Home = () => {
   };
 
   const addCommentSubmit = async () => {
+    if (commentData.comment === "") return toast.error("Enter your Comment");
     const data = {
       post_id: addCommentModal,
       comment: commentData.comment,
@@ -137,8 +142,97 @@ const Home = () => {
     }
   };
 
+  const getAllUsersData = async () => {
+    getAllUser()
+      .then((response) => {
+        if (response) {
+          setAllUsersData(response);
+        }
+      })
+      .finally(() => {
+        // dispatch(loadingStop());
+      });
+  };
+
+  const users = [
+    {
+      _id: "6620fe1cdd30644088ad71db",
+      first_name: "Tohidujjaman",
+      last_name: "Hoque",
+      email: "tohidujjamanhoque@gmail.com",
+      user_id: "1000",
+    },
+    {
+      _id: "662132fcd846d0f8dcc2633f",
+      first_name: "Tohidujjaman",
+      last_name: "Hoque",
+      email: "tohi7479@gmail.com",
+      user_id: "1001",
+    },
+    {
+      _id: "6621544b32411054e293fafc",
+      first_name: "Apoorva",
+      last_name: "something",
+      email: "justmobiles24x7@gmail.com",
+      user_id: "1002",
+    },
+    {
+      _id: "6621f949f0c008cecd3c113d",
+      first_name: "Mohsin",
+      last_name: "Raja",
+      email: "mohsin@gmail.com",
+      user_id: "1003",
+    },
+    {
+      _id: "66223dcf80bc0deb1d785ab2",
+      first_name: "Hasim",
+      last_name: "Molla",
+      email: "mhasim790@gmail.com",
+      user_id: "1004",
+    },
+    {
+      _id: "66228c806ccc01a7e8f73467",
+      first_name: "First",
+      last_name: "Last Name",
+      email: "temp@gmail.com",
+      user_id: "1005",
+    },
+    {
+      _id: "6624c59d7e51414e22258e1e",
+      first_name: "Muqsedur",
+      last_name: "Rahman",
+      email: "muqsedur@gmail.com",
+      user_id: "1006",
+    },
+  ];
+
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+
+    // console.log(allUsersData);
+    setInputValue(value);
+    const wordArray = value.split(" ");
+    const filteredSuggestions = allUsersData.filter((user) => {
+      return wordArray.every((word) => {
+        return (
+          user.first_name.toLowerCase().includes(word.toLowerCase()) ||
+          user.last_name.toLowerCase().includes(word.toLowerCase()) ||
+          user.user_id.toLowerCase().includes(word.toLowerCase()) ||
+          user.email.toLowerCase().includes(word.toLowerCase())
+        );
+      });
+    });
+
+    setSuggestions(filteredSuggestions);
+    console.log(filteredSuggestions);
+    if (value === "") {
+      setSuggestions([]);
+    }
+  };
+
   useEffect(() => {
     getAllPostFunc();
+    getAllUsersData();
   }, []);
 
   const _this = {
@@ -170,6 +264,11 @@ const Home = () => {
     updatePostSubmit,
     deletePostSubmit,
     addOrRemoveLikeFunc,
+    inputValue,
+    setInputValue,
+    suggestions,
+    setSuggestions,
+    handleInputChange,
   };
   return (
     <>

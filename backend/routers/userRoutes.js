@@ -2,6 +2,7 @@ import { Router } from "express";
 import { isAuthenticated } from "../middleware/authentication.js";
 import {
   CreateCertificate,
+  GetAllUser,
   LoginUser,
   OtherProfile,
   RegisterUser,
@@ -19,6 +20,7 @@ router.post("/login", LoginUser);
 router.post("/send-otp", SendOtp);
 
 //authentic routes
+router.get("/get-all-users", GetAllUser);
 router.post("/update", isAuthenticated, UpdateProfile);
 router.post("/update-skills", isAuthenticated, UpdateSkills);
 router.delete("/delete", isAuthenticated, deleteProfile);

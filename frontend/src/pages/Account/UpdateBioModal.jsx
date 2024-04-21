@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-import { Button, Image, Input, Modal, Avatar } from "antd";
-import { AiOutlinePlusCircle } from "react-icons/ai";
+import React from "react";
+import { useSelector } from "react-redux";
+import { Input, Modal, Avatar } from "antd";
+import { PiUploadSimple } from "react-icons/pi";
 import { TbCameraCancel } from "react-icons/tb";
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const UpdateBioModal = ({ _this }) => {
+  const { user } = useSelector((state) => state.profile);
   const handleCancel = () => {
     _this?.setUpdateBioModalOpen(false);
   };
@@ -48,16 +52,28 @@ const UpdateBioModal = ({ _this }) => {
               </button>
             </div>
           ) : (
-            <Input
-              size="large"
-              type="file"
-              accept="image/x-png,image/gif,image/jpeg"
-              className="bg-white rounded-lg w-full"
-              placeholder="Choose your avatar"
-              label={"bio"}
-              // value={_this?.userBio}
-              onChange={(e) => _this?.handleAvatar(e)}
-            />
+            <div className="w-full flex flex-col justify-center items-center gap-y-4 ps-0 space-x-1 rtl:space-x-reverse sm:ps-2">
+              <Avatar
+                className="h-32 w-32 border-0.5 border-gray-300"
+                src={`${BASE_URL + user?.avatar}`}
+              />
+              <div>
+                <label
+                  htmlFor="avatar"
+                  className="flex items-center gap-x-2 p-2 rounded-md hover:bg-primary/10 hover:text-primary bg-gray-100 transition-all duration-300 cursor-pointer"
+                >
+                  <span className="font-light text-sm">Change</span>{" "}
+                  <PiUploadSimple className="text-xl" />
+                </label>
+                <input
+                  id="avatar"
+                  type="file"
+                  accept="image/x-png,image/gif,image/jpeg"
+                  className="hidden justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-primary hover:bg-primary/10"
+                  onChange={(e) => _this?.handleAvatar(e)}
+                />
+              </div>
+            </div>
           )}
         </div>
         <div className="py-5">

@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   deleteCertificate,
-  login,
   updateBioAndAvatar,
   updateUserCertificates,
   updateUserSkills,
@@ -13,7 +12,7 @@ import {
 import toast from "react-hot-toast";
 import { setUser } from "../../reducer/slices/profileSlice";
 
-const Login = () => {
+const Account = () => {
   // const router = useRoutes();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,23 +22,6 @@ const Login = () => {
     email: "",
     password: "",
   });
-
-  const onProfileUpdate = () => {
-    // updateBioAndAvatar(token, { bio: userBio });
-    // .then((response) => {
-    //   if (response) {
-    //     if (response.otp) {
-    //       setOtpReceived(true);
-    //       //dispatch(signup(response));
-    //       toast.success('OTP has been set to your email account.');
-    //     }
-    //   }
-    // })
-    // .finally(() => {
-    //   dispatch(loadingStop());
-    // });
-    // dispatch(updateProfile(userSkills, token, navigate));
-  };
 
   /****************************** update Bio  **************************************/
 
@@ -168,7 +150,6 @@ const Login = () => {
     user,
     formValue,
     setFormValue,
-    onProfileUpdate,
     user,
     updateSkillModalOpen,
     setUpdateSkillModalOpen,
@@ -204,4 +185,4 @@ const Login = () => {
   return <Body {..._this} />;
 };
 
-export default Login;
+export default Account;

@@ -316,6 +316,18 @@ export const OtherProfile = async (req, res, next) => {
 
     return ResponseHandler(res, 200, "profile found", user);
   } catch (error) {
-    console.log("profile delete error ->", error);
+    console.log("other profile error ->", error);
+  }
+};
+
+/************************************* GetAllUser  ***************************************/
+export const GetAllUser = async (req, res, next) => {
+  try {
+    const users = await DbUser.find();
+    if (!users) return ResponseErrorHandler(res, 202, "Failed to get Users");
+
+    return ResponseHandler(res, 200, "all user", users);
+  } catch (error) {
+    console.log("get all user ->", error);
   }
 };

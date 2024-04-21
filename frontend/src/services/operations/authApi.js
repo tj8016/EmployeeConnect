@@ -14,6 +14,7 @@ const {
   CREATE_CERTIFICATE_API,
   DELETECERTIFICATE_API,
   UPDATE_SKILLS_API,
+  GET_ALL_USERS_API,
 } = authEndpoints;
 
 export function sendOtp(data, setOtpReceived, setFormValue) {
@@ -115,30 +116,42 @@ export function logout(navigate) {
     dispatch(setToken(null));
     dispatch(setUser(null));
     // dispatch(resetCart())
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem("EmployeConnect-token");
+    localStorage.removeItem("EmployeConnect-user");
     toast.success("Logged Out");
     navigate("/");
   };
 }
 
 export const getOtherProfile = async (token, data) => {
-  const toastId = toast.loading("Loading...");
   let result = {};
   try {
     const response = await apiConnector("POST", OtherProfile_API, data, {
       Authorization: `Bearer ${token}`,
     });
     if (response?.data?.error) {
-      throw new Error(response.data.error);
+      return toast.error(response?.data?.error);
     }
 
     result = response?.data?.data;
   } catch (error) {
     console.log("get other profile API ERROR............", error);
-    toast.error(error.message);
   }
-  toast.dismiss(toastId);
+  return result;
+};
+
+export const getAllUser = async () => {
+  let result = [];
+  try {
+    const response = await apiConnector("GET", GET_ALL_USERS_API);
+    if (response?.data?.error) {
+      return toast.error(response?.data?.error);
+    }
+
+    result = response?.data?.data;
+  } catch (error) {
+    console.log("GET_ALL_USERS_API ERROR............", error);
+  }
   return result;
 };
 

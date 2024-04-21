@@ -8,11 +8,11 @@ import DeleteCertificatesModal from "./DeleteCertificateModal";
 const Body = (_this) => {
   return (
     <>
-      <ProfileDetails _this={_this} />;
-      <UpdateSkillsModal _this={_this} />;
-      <UpdateBioModal _this={_this} />;
-      <UpdateCertificatesModal _this={_this} />;
-      <DeleteCertificatesModal _this={_this} />;
+      <ProfileDetails _this={_this} />
+      <UpdateSkillsModal _this={_this} />
+      <UpdateBioModal _this={_this} />
+      <UpdateCertificatesModal _this={_this} />
+      <DeleteCertificatesModal _this={_this} />
     </>
   );
 };

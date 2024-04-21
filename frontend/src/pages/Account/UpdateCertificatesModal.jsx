@@ -29,7 +29,7 @@ const UpdateCertificatesModal = ({ _this }) => {
               <input
                 id="certificate_input"
                 type="file"
-                accept="application/pdf,application/vnd.ms-excel"
+                accept="application/pdf"
                 className="hidden justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-primary hover:bg-primary/10"
                 onChange={(e) => _this?.onNewFileAdd(e)}
               />
@@ -50,8 +50,9 @@ const UpdateCertificatesModal = ({ _this }) => {
                 Your comment
               </label>
               <Input
+                size="large"
                 id="certificate_title"
-                className="w-full px-0 text-sm focus:ring-0 "
+                className="bg-white rounded-lg"
                 placeholder="Enter Certificate Title"
                 value={_this?.certificateTitle?.certificate_title}
                 onChange={(e) => {
@@ -63,12 +64,14 @@ const UpdateCertificatesModal = ({ _this }) => {
               />
             </div>
             {_this?.files && (
-              <div className="flex items-center text-gray-medium text-lg font-normal  px-3 py-2 rounded-lg relative">
-                <Image src={_this?.files?.preview} />
-                <IoClose
+              <div className="w-full justify-center flex flex-col gap-y-5 items-center text-gray-medium text-lg font-normal  px-3 py-2 rounded-lg relative">
+                <iframe src={_this?.files?.preview} />
+                <button
                   onClick={() => _this?.onFileDelete()}
-                  className="ml-3 text-red/85 absolute top-0 right-0 cursor-pointer text-xl"
-                />
+                  className="flex items-center gap-x-1 text-white bg-secondary border-0 py-2 px-2 focus:outline-none hover:bg-primary-dark rounded-full text-sm"
+                >
+                  <IoClose className="text-lg" />
+                </button>
               </div>
             )}
           </div>

@@ -6,20 +6,17 @@ import {
   Card,
   Image,
   Dropdown,
-  Input,
   Collapse,
   theme,
   ConfigProvider,
-  Button,
-  Space,
 } from "antd";
 import { HiOutlineTrash } from "react-icons/hi";
 import { AiOutlineEdit } from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { CaretRightOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
-const { Meta } = Card;
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const Posts = ({ post, _this }) => {
@@ -87,9 +84,9 @@ const Posts = ({ post, _this }) => {
       label: `Comments (${post?.comments.length})`,
       children: (
         <div className="flex flex-col gap-y-2">
-          {post?.comments.map((comment) => {
+          {post?.comments.map((comment, index) => {
             return (
-              <div className="bg-white rounded-md pl-3 py-2">
+              <div key={index} className="bg-white rounded-md pl-3 py-2">
                 <p className="text-xs font-bold">
                   {`${comment?.user?.first_name} ${comment?.user?.last_name}`}
                   {post?.owner?._id === comment?.user?._id && (
@@ -121,23 +118,23 @@ const Posts = ({ post, _this }) => {
         title={
           <div className="flex justify-between items-center h-10">
             {user?.avatar !== "" ? (
-              <Meta
-                avatar={
-                  <Avatar
-                    className="border"
-                    size={40}
-                    src={`${BASE_URL + post?.owner?.avatar}`}
-                  />
-                }
-                title={post?.owner?.first_name + " " + post?.owner?.last_name}
-              />
+              <Link
+                to={`/users/${post?.owner?._id}`}
+                className="flex items-center gap-x-2"
+              >
+                <Avatar size={40} src={`${BASE_URL + post?.owner?.avatar}`} />
+                <p>{post?.owner?.first_name + " " + post?.owner?.last_name}</p>
+              </Link>
             ) : (
-              <Meta
-                avatar={
-                  <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />
-                }
-                title={post?.owner?.first_name + " " + post?.owner?.last_name}
-              />
+              <Link
+                to={`/users/${post?.owner?._id}`}
+                className="flex items-center gap-x-2"
+              >
+                <Avatar
+                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${post?.owner?.first_name}%20${post?.owner?.last_name}`}
+                />
+                <p>{post?.owner?.first_name + " " + post?.owner?.last_name}</p>
+              </Link>
             )}
             {(user?.account_type === "Admin" ||
               user?._id === post?.owner?._id) && (
@@ -159,7 +156,10 @@ const Posts = ({ post, _this }) => {
           <p>{post?.caption}</p>
           <div className="flex justify-center">
             {post?.image_url !== "" && (
-              <Image src={`${BASE_URL + post?.image_url}`} />
+              <Image
+                className="object-cover"
+                src={`${BASE_URL + post?.image_url}`}
+              />
             )}
           </div>
           <div className="w-full flex justify-around py-1 mt-4 border-t pt-3">
@@ -170,7 +170,7 @@ const Posts = ({ post, _this }) => {
                 ) : (
                   <FcLikePlaceholder />
                 )}
-                <p className="text-xs">Like</p>
+                <p className="text-xs">Like {`(${post?.likes?.length})`}</p>
               </div>
             </button>
 
