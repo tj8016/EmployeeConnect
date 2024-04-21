@@ -11,7 +11,9 @@ const {
   LOGIN_API,
   UpdateProfile_API,
   OtherProfile_API,
+  CREATE_CERTIFICATE_API,
   DELETECERTIFICATE_API,
+  UPDATE_SKILLS_API,
 } = authEndpoints;
 
 export function sendOtp(data, setOtpReceived, setFormValue) {
@@ -170,7 +172,7 @@ export const updateUserCertificates = async (token, data) => {
   const toastId = toast.loading("Loading...");
   let result = [];
   try {
-    const response = await apiConnector("POST", UpdateProfile_API, data, {
+    const response = await apiConnector("POST", CREATE_CERTIFICATE_API, data, {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     });
@@ -180,9 +182,9 @@ export const updateUserCertificates = async (token, data) => {
 
     result = response?.data?.data;
     localStorage.setItem("EmployeConnect-user", JSON.stringify(result)); // important
-    toast.success("Profile Updated");
+    toast.success("Certificate Added");
   } catch (error) {
-    console.log("Update certificates API ERROR............", error);
+    console.log("CREATE_CERTIFICATE_API ERROR............", error);
     toast.error(error.message);
   }
   toast.dismiss(toastId);
@@ -218,19 +220,19 @@ export const updateUserSkills = async (token, data) => {
   const toastId = toast.loading("Loading...");
   let result = [];
   try {
-    const response = await apiConnector("POST", UpdateProfile_API, data, {
+    const response = await apiConnector("POST", UPDATE_SKILLS_API, data, {
       Authorization: `Bearer ${token}`,
     });
     if (response?.data?.error) {
-      throw new Error(response.data.error);
+      toast.dismiss(toastId);
+      return toast.error(response?.data?.error);
     }
 
     result = response?.data?.data;
     localStorage.setItem("EmployeConnect-user", JSON.stringify(result)); // important
-    toast.success("Profile Updated");
+    toast.success("Skills Updated");
   } catch (error) {
-    console.log("Update skills API ERROR............", error);
-    toast.error(error.message);
+    console.log("UPDATE_SKILLS_API ERROR............", error);
   }
   toast.dismiss(toastId);
   return result;

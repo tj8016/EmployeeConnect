@@ -6,8 +6,10 @@ export const authEndpoints = {
   SIGNUP_API: BASE_URL + "/api/v1/user/register",
   LOGIN_API: BASE_URL + "/api/v1/user/login",
   UpdateProfile_API: BASE_URL + "/api/v1/user/update",
+  UPDATE_SKILLS_API: BASE_URL + "/api/v1/user/update-skills",
   OtherProfile_API: BASE_URL + "/api/v1/user/get-user",
-  DELETECERTIFICATE_API: BASE_URL + "/api/v1/user//delete-certificate",
+  CREATE_CERTIFICATE_API: BASE_URL + "/api/v1/user/create-certificate",
+  DELETECERTIFICATE_API: BASE_URL + "/api/v1/user/delete-certificate",
 };
 
 export const postEndpoints = {

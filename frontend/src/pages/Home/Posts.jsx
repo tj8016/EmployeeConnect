@@ -80,7 +80,7 @@ const Posts = ({ post, _this }) => {
     borderRadius: token.borderRadiusLG,
     border: "none",
   };
-  console.log(post);
+
   const getItems = (panelStyle) => [
     {
       key: "1",
@@ -119,13 +119,26 @@ const Posts = ({ post, _this }) => {
     >
       <Card
         title={
-          <div className="flex justify-between">
-            <Meta
-              avatar={
-                <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />
-              }
-              title={post?.owner?.first_name + " " + post?.owner?.last_name}
-            />
+          <div className="flex justify-between items-center h-10">
+            {user?.avatar !== "" ? (
+              <Meta
+                avatar={
+                  <Avatar
+                    className="border"
+                    size={40}
+                    src={`${BASE_URL + post?.owner?.avatar}`}
+                  />
+                }
+                title={post?.owner?.first_name + " " + post?.owner?.last_name}
+              />
+            ) : (
+              <Meta
+                avatar={
+                  <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />
+                }
+                title={post?.owner?.first_name + " " + post?.owner?.last_name}
+              />
+            )}
             {(user?.account_type === "Admin" ||
               user?._id === post?.owner?._id) && (
               <Dropdown

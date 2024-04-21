@@ -44,7 +44,8 @@ const schema = new mongoose.Schema(
     ],
     certificates: [
       {
-        img_url: String,
+        certificate_title: String,
+        certificate_url: String,
       },
     ],
     posts: [

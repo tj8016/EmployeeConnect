@@ -165,27 +165,14 @@ export const SendOtp = async (req, res, next) => {
 /************************************* update profile function ***************************************/
 export const UpdateProfile = async (req, res, next) => {
   try {
-    //**avatar update will be implemented later
+    // get all data from body
     const { first_name, last_name, bio = "", email, skills = [] } = req.body;
     const { _id } = req.user;
 
-    const files = req.files?.certificatesFiles;
     const avatar = req.files?.avatar;
 
     const user = await DbUser.findOne({ _id });
-    //upload certificates
-    let newcertificates = user.certificates;
-    if (files?.length) {
-      for (let item of files) {
-        let storedUrl = ImageUploader("/uploads/certificates/", item);
-        newcertificates = [
-          ...newcertificates,
-          {
-            img_url: storedUrl,
-          },
-        ];
-      }
-    }
+    if (!user) return ResponseErrorHandler(res, 202, "User not found !");
 
     //upload avatar
     if (avatar) {
@@ -207,8 +194,7 @@ export const UpdateProfile = async (req, res, next) => {
     if (last_name) user.last_name = last_name;
     if (email) user.email = email;
     if (bio) user.bio = bio;
-    if (skills) user.skills = skills;
-    if (newcertificates.length) user.certificates = newcertificates;
+    if (skills.length) user.skills = skills;
 
     await user.save();
 
@@ -218,25 +204,91 @@ export const UpdateProfile = async (req, res, next) => {
   }
 };
 
+export const UpdateSkills = async (req, res, next) => {
+  try {
+    const { skills = [] } = req.body;
+    const { _id } = req.user;
+
+    const user = await DbUser.findOne({ _id });
+    if (!user) return ResponseErrorHandler(res, 202, "User not found !");
+
+    user.skills = skills;
+
+    await user.save();
+
+    return ResponseHandler(res, 200, "Skills Updated !", user);
+  } catch (error) {
+    console.log("skills update error ->", error);
+  }
+};
+
+export const CreateCertificate = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+    const { certificate_title = "" } = req.body;
+    const certificateFile = req?.files?.certificateFile;
+
+    const user = await DbUser.findOne({ _id });
+    if (!user) return ResponseErrorHandler(res, 202, "User not found !");
+
+    if (certificate_title === "") {
+      return ResponseErrorHandler(res, 202, "Title is Required");
+    }
+    let storedUrl = null;
+    if (certificateFile !== undefined) {
+      // Upload image or pdf on db
+      storedUrl = ImageUploader("/uploads/certificates/", certificateFile);
+
+      if (!storedUrl) {
+        return ResponseErrorHandler(res, 202, "Failed to Upload Certificate.");
+      }
+      // Push the certificate data into the certificates array
+      user.certificates.push({
+        certificate_title: certificate_title,
+        certificate_url: storedUrl,
+      });
+
+      await user.save();
+      return ResponseHandler(res, 200, "Certificate Added", user);
+    } else {
+      return ResponseErrorHandler(res, 202, "Send Certificate First.");
+    }
+  } catch (error) {
+    console.log("add certificate error ->", error);
+  }
+};
+
 /***************************************** delete user certifcate ************************************* */
 export const deleteCertificate = async (req, res, next) => {
   try {
-    const { file } = req.body;
-    const user = req.user;
-    let newcertificates = user.certificates;
-    // delete image file
+    const { certificate_id } = req.body;
+    const _id = req.user;
 
-    const deleteImage = ImageDeleter(file);
-    if (!deleteImage)
-      return ResponseErrorHandler(res, 202, "Existing image file not Deleted.");
+    const user = await DbUser.findOne({ _id });
+    if (!user) return ResponseErrorHandler(res, 202, "User not found !");
+    const file = user.certificates.find((items) =>
+      items._id.equals(certificate_id)
+    );
+    if (file) {
+      // delete image file
+      const deleteImage = ImageDeleter(file?.certificate_url);
+      if (!deleteImage)
+        return ResponseErrorHandler(
+          res,
+          202,
+          "Existing image file not Deleted."
+        );
+    }
 
-    let newcertificate = newcertificates.filter((item) => item.img_url != file);
+    let newcertificate = user.certificates.filter(
+      (item) => item._id != certificate_id
+    );
     if (newcertificate) user.certificates = newcertificate;
     await user.save();
 
     return ResponseHandler(res, 200, "certificate deleted !", user);
   } catch (error) {
-    console.log("profile delete error ->", error);
+    console.log("certificate delete error ->", error);
   }
 };
 

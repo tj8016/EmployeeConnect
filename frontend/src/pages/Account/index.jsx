@@ -79,36 +79,42 @@ const Login = () => {
   const [DeleteCertificatesModalOpen, setDeleteCertificatesModalOpen] =
     useState(false);
   const [deleteFileData, setDeleteFileData] = useState(null);
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState(null);
+  const [certificateTitle, setCertificateTitle] = useState({
+    certificate_title: "",
+  });
 
   const onNewFileAdd = (e) => {
     if (e.target.files.length > 0) {
-      setFiles([
-        ...files,
-        {
-          preview: URL.createObjectURL(e.target.files[0]),
-          data: e.target.files[0],
-        },
-      ]);
+      setFiles({
+        preview: URL.createObjectURL(e.target.files[0]),
+        data: e.target.files[0],
+      });
     }
   };
 
-  const onFileDelete = (val) => {
-    setFiles(files.filter((item) => item?.data != val));
+  const onFileDelete = () => {
+    setFiles(null);
   };
 
   const onFilesUpdate = () => {
-    const formData = new FormData();
-    for (let item of files) {
-      formData.append("certificatesFiles", item.data);
+    if (files === null) return toast.error("Upload Certificate First");
+    if (certificateTitle?.certificate_title == "") {
+      return toast.error("Title is Required");
     }
+    const formData = new FormData();
+    formData.append("certificate_title", certificateTitle?.certificate_title);
+    formData.append("certificateFile", files?.data);
 
     updateUserCertificates(token, formData)
       .then((response) => {
         if (response) {
           setUpdateCertificatesModalOpen(false);
           dispatch(setUser(response));
-          setFiles([]);
+          setFiles(null);
+          setCertificateTitle({
+            certificate_title: "",
+          });
         }
       })
       .finally(() => {
@@ -117,7 +123,7 @@ const Login = () => {
   };
 
   const DeleteCertificate = () => {
-    deleteCertificate(token, { file: deleteFileData })
+    deleteCertificate(token, { certificate_id: deleteFileData })
       .then((response) => {
         if (response) {
           setDeleteCertificatesModalOpen(false);
@@ -180,6 +186,8 @@ const Login = () => {
     userBio,
     setUserBio,
     onSkillsUpdate,
+    certificateTitle,
+    setCertificateTitle,
     files,
     setFiles,
     onNewFileAdd,
