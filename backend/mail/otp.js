@@ -1,4 +1,4 @@
-export const otpMailTemplate = (name, otp) => {
+export const otpMailTemplate = (otp) => {
   return `<!DOCTYPE html>
     <html>
     

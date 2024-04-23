@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   deleteCertificate,
+  deleteUser,
+  getAllUser,
   updateBioAndAvatar,
   updateUserCertificates,
   updateUserSkills,
@@ -61,22 +63,32 @@ const Account = () => {
   const [DeleteCertificatesModalOpen, setDeleteCertificatesModalOpen] =
     useState(false);
   const [deleteFileData, setDeleteFileData] = useState(null);
-  const [files, setFiles] = useState(null);
+  const [files, setFiles] = useState({
+    preview: "",
+    data: "",
+  });
   const [certificateTitle, setCertificateTitle] = useState({
     certificate_title: "",
   });
+  const [allUsersData, setAllUsersData] = useState([]);
+  const [deleteUserModal, setDeleteUserModal] = useState(false);
+  const [deleteUserData, setDeleteUserData] = useState(null);
 
   const onNewFileAdd = (e) => {
     if (e.target.files.length > 0) {
-      setFiles({
+      setFiles((prev) => ({
+        ...prev,
         preview: URL.createObjectURL(e.target.files[0]),
         data: e.target.files[0],
-      });
+      }));
     }
   };
 
   const onFileDelete = () => {
-    setFiles(null);
+    setFiles({
+      preview: "",
+      data: "",
+    });
   };
 
   const onFilesUpdate = () => {
@@ -146,8 +158,41 @@ const Account = () => {
       });
   };
 
+  const getAllUsersData = async () => {
+    getAllUser()
+      .then((response) => {
+        if (response) {
+          setAllUsersData(response);
+        }
+      })
+      .finally(() => {
+        // dispatch(loadingStop());
+      });
+  };
+
+  const deleteUserSubmit = async () => {
+    const data = {
+      user_id: deleteUserData,
+    };
+    deleteUser(data, token)
+      .then((response) => {
+        if (response) {
+          setDeleteUserData(null);
+          setDeleteUserModal(false);
+          getAllUsersData();
+        }
+      })
+      .finally(() => {});
+  };
+
+  useEffect(() => {
+    getAllUsersData();
+  }, []);
+
   const _this = {
     user,
+    allUsersData,
+    setAllUsersData,
     formValue,
     setFormValue,
     user,
@@ -181,6 +226,11 @@ const Account = () => {
     DeleteCertificatesModalOpen,
     setDeleteFileData,
     DeleteCertificate,
+    deleteUserModal,
+    setDeleteUserModal,
+    deleteUserData,
+    setDeleteUserData,
+    deleteUserSubmit,
   };
   return <Body {..._this} />;
 };

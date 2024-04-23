@@ -77,11 +77,15 @@ const EditPostModal = ({ _this }) => {
                     className="border"
                   />
                 ) : (
-                  <Image
-                    width={700}
-                    src={`${BASE_URL + _this?.editPostImageFile}`}
-                    className="border"
-                  />
+                  <div>
+                    {_this?.editPostImageFile != "" && (
+                      <Image
+                        width={700}
+                        src={`${BASE_URL + _this?.editPostImageFile}`}
+                        className="border"
+                      />
+                    )}
+                  </div>
                 )}
               </div>
             )}

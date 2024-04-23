@@ -1,25 +1,25 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Avatar, Card } from "antd";
 const { Meta } = Card;
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const AddPost = ({ _this }) => {
+  const { user } = useSelector((state) => state.profile);
   return (
     <Card>
       <Meta
         title={
           <div className="flex items-center gap-4">
             <div className="w-max">
-              <Avatar
-                size={{
-                  xs: 40,
-                  sm: 40,
-                  md: 45,
-                  lg: 50,
-                  xl: 55,
-                  xxl: 70,
-                }}
-                src="https://res.cloudinary.com/dbvdqcii9/image/upload/v1692768405/My%20Portfolio/aboutimg_je6vny.jpg"
-              />
+              {user?.avatar !== "" ? (
+                <Avatar size={40} src={`${BASE_URL + user?.avatar}`} />
+              ) : (
+                <Avatar
+                  size={40}
+                  src={`https://api.dicebear.com/5.x/initials/svg?seed=${user?.first_name}%20${user?.last_name}`}
+                />
+              )}
             </div>
             <button
               onClick={(e) => {

@@ -154,58 +154,6 @@ const Home = () => {
       });
   };
 
-  const users = [
-    {
-      _id: "6620fe1cdd30644088ad71db",
-      first_name: "Tohidujjaman",
-      last_name: "Hoque",
-      email: "tohidujjamanhoque@gmail.com",
-      user_id: "1000",
-    },
-    {
-      _id: "662132fcd846d0f8dcc2633f",
-      first_name: "Tohidujjaman",
-      last_name: "Hoque",
-      email: "tohi7479@gmail.com",
-      user_id: "1001",
-    },
-    {
-      _id: "6621544b32411054e293fafc",
-      first_name: "Apoorva",
-      last_name: "something",
-      email: "justmobiles24x7@gmail.com",
-      user_id: "1002",
-    },
-    {
-      _id: "6621f949f0c008cecd3c113d",
-      first_name: "Mohsin",
-      last_name: "Raja",
-      email: "mohsin@gmail.com",
-      user_id: "1003",
-    },
-    {
-      _id: "66223dcf80bc0deb1d785ab2",
-      first_name: "Hasim",
-      last_name: "Molla",
-      email: "mhasim790@gmail.com",
-      user_id: "1004",
-    },
-    {
-      _id: "66228c806ccc01a7e8f73467",
-      first_name: "First",
-      last_name: "Last Name",
-      email: "temp@gmail.com",
-      user_id: "1005",
-    },
-    {
-      _id: "6624c59d7e51414e22258e1e",
-      first_name: "Muqsedur",
-      last_name: "Rahman",
-      email: "muqsedur@gmail.com",
-      user_id: "1006",
-    },
-  ];
-
   const handleInputChange = (event) => {
     const value = event.target.value;
 
@@ -236,6 +184,8 @@ const Home = () => {
   }, []);
 
   const _this = {
+    allUsersData,
+    setAllUsersData,
     allPostData,
     setAllPostData,
     addPostModal,

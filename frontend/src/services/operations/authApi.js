@@ -9,12 +9,15 @@ const {
   SEND_OTP_API,
   SIGNUP_API,
   LOGIN_API,
+  FORGOT_PASSWORD_API,
+  RESEND_OTP_API,
   UpdateProfile_API,
   OtherProfile_API,
   CREATE_CERTIFICATE_API,
   DELETECERTIFICATE_API,
   UPDATE_SKILLS_API,
   GET_ALL_USERS_API,
+  DELETE_USER_API,
 } = authEndpoints;
 
 export function sendOtp(data, setOtpReceived, setFormValue) {
@@ -123,6 +126,40 @@ export function logout(navigate) {
   };
 }
 
+export const forgotPassword = async (data) => {
+  const toastId = toast.loading("Loading...");
+  let result = false;
+  try {
+    const response = await apiConnector("POST", FORGOT_PASSWORD_API, data);
+    if (response?.data?.error) {
+      toast.dismiss(toastId);
+      return toast.error(response.data.error);
+    }
+    result = response?.data?.data;
+  } catch (error) {
+    console.log("FORGOT_PASSWORD_API ERROR............", error);
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
+export const resendOtp = async (data) => {
+  const toastId = toast.loading("Loading...");
+  let result = false;
+  try {
+    const response = await apiConnector("POST", RESEND_OTP_API, data);
+    if (response?.data?.error) {
+      toast.dismiss(toastId);
+      return toast.error(response.data.error);
+    }
+    result = response?.data?.data;
+  } catch (error) {
+    console.log("RESEND_OTP_API ERROR............", error);
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
 export const getOtherProfile = async (token, data) => {
   let result = {};
   try {
@@ -152,6 +189,27 @@ export const getAllUser = async () => {
   } catch (error) {
     console.log("GET_ALL_USERS_API ERROR............", error);
   }
+  return result;
+};
+
+export const deleteUser = async (data, token) => {
+  const toastId = toast.loading("Loading...");
+  let result = false;
+  try {
+    const response = await apiConnector("DELETE", DELETE_USER_API, data, {
+      Authorization: `Bearer ${token}`,
+    });
+
+    if (response?.data?.error) {
+      toast.dismiss(toastId);
+      return toast.error(response.data.error);
+    }
+    result = true;
+    toast.success("User Deleted");
+  } catch (error) {
+    console.log("DELETE_USER_API ERROR............", error);
+  }
+  toast.dismiss(toastId);
   return result;
 };
 

@@ -117,7 +117,7 @@ const Posts = ({ post, _this }) => {
       <Card
         title={
           <div className="flex justify-between items-center h-10">
-            {user?.avatar !== "" ? (
+            {post?.owner?.avatar !== "" ? (
               <Link
                 to={`/users/${post?.owner?._id}`}
                 className="flex items-center gap-x-2"

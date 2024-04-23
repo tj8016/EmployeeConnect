@@ -11,12 +11,12 @@ const Body = (_this) => {
   return (
     <>
       <div className="w-full flex justify-center min-h-[calc(100vh-100px)] md:min-h-[calc(100vh-100px)]">
-        <div className="flex flex-col w-11/12 sm:w-10/12 md:w-7/12 max-w-maxContent gap-y-8">
-          <div className="w-full lg:w-9/12 mx-auto">
+        <div className="flex flex-col w-11/12 sm:w-10/12 md:w-8/12 xl:w-7/12 max-w-maxContent gap-y-8">
+          <div className="w-full xl:w-9/12 mx-auto">
             <Search _this={_this} />
           </div>
           <div className="w-full flex justify-center">
-            <div className="flex flex-col justify-center gap-y-4 w-full lg:w-9/12">
+            <div className="flex flex-col justify-center gap-y-4 w-full xl:w-9/12">
               <div className="w-full">
                 <AddPost _this={_this} />
               </div>

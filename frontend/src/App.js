@@ -10,6 +10,7 @@ import OtherProfiles from "./pages/OtherProfiles";
 
 import PrivateRoutes from "./components/PrivateRoutes";
 import PublicRoutes from "./components/PublicRoutes";
+import ForgotPassword from "./pages/ForgotPassword";
 
 const App = () => {
   return (
@@ -28,6 +29,14 @@ const App = () => {
           element={
             <PublicRoutes>
               <SingUp />
+            </PublicRoutes>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <PublicRoutes>
+              <ForgotPassword />
             </PublicRoutes>
           }
         />

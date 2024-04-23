@@ -12,7 +12,7 @@ let transpoter = nodemailer.createTransport({
   },
 });
 
-export const sendOtp = async (to, name, otpValue) => {
+export const sendOtp = async (to, otpValue) => {
   try {
     const option = {
       from: "Employee Connect <" + process.env.MAIL_USER + ">",

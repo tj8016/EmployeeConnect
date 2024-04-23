@@ -63,7 +63,7 @@ const UpdateCertificatesModal = ({ _this }) => {
                 }}
               />
             </div>
-            {_this?.files && (
+            {_this?.files?.preview !== "" && (
               <div className="w-full justify-center flex flex-col gap-y-5 items-center text-gray-medium text-lg font-normal  px-3 py-2 rounded-lg relative">
                 <iframe src={_this?.files?.preview} />
                 <button

@@ -51,8 +51,6 @@ const SingUp = () => {
 
   const onResendOTPSubmit = () => {
     const data = {
-      first_name: signupData.first_name,
-      last_name: signupData.last_name,
       email: signupData.email,
     };
     console.log(data);
