@@ -15,14 +15,7 @@ const Port = process.env.PORT;
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 connectDB();
-
 //set up cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET,
-});
-
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors({ origin: true }));
 

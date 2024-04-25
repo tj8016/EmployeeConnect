@@ -1,4 +1,6 @@
 import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+dotenv.config({ path: "./config/config.env" });
 
 let transpoter = nodemailer.createTransport({
   service: "Gmail",
@@ -6,8 +8,8 @@ let transpoter = nodemailer.createTransport({
   port: 465,
   secure: true,
   auth: {
-    user: "tohidujjamanhoque@gmail.com",
-    pass: "uoquvfvuvgaszbdr",
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS,
   },
 });
 
