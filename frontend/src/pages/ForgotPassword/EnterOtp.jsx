@@ -21,7 +21,7 @@ const EnterOtp = ({ _this }) => {
   }, [timer, timeOutCallback]);
 
   const resetTimer = function () {
-    if (!timer) {
+    if (timer <= 0) {
       setTimer(60);
     }
   };
@@ -67,16 +67,16 @@ const EnterOtp = ({ _this }) => {
         Didn’t receive the email?
         <span
           onClick={() => {
-            timer === 0 && _this.onResendOTPSubmit();
+            timer <= 0 && _this.onResendOTPSubmit();
             resetTimer();
           }}
           className={`ml-2 ${
-            timer === 0 ? "text-blue-md" : "text-gray-medium"
+            timer <= 0 ? "text-blue-md" : "text-gray-medium"
           } text-sm font-semibold cursor-pointer select-none`}
         >
           Click to resend OTP
         </span>
-        {timer != 0 && (
+        {timer > 0 && (
           <span className="text-sm font-semibold">
             {"( "}
             {timer}

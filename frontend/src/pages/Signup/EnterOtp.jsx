@@ -22,7 +22,7 @@ const EnterOtp = ({ _this }) => {
   }, [timer, timeOutCallback]);
 
   const resetTimer = function () {
-    if (!timer) {
+    if (timer <= 0) {
       setTimer(60);
     }
   };
@@ -31,7 +31,7 @@ const EnterOtp = ({ _this }) => {
     <div className=" body-font py-6 px-8 min-h-screen">
       <SmallHeader isLogin={true} />
 
-      <div className="xs:p-0 p-8 flex flex-col w-full sm:w-[90%] md:w-1/2 lg:w-2/5 xl:w-1/3 mx-auto mt-4 min-h-[80vh]">
+      <div className="xs:p-0 p-8 flex flex-col justify-center w-full sm:w-[90%] md:w-1/2 lg:w-2/5 xl:w-1/3 mx-auto mt-4 min-h-[80vh]">
         <div className="text-center">
           <div className="w-14 h-14 p-3.5 bg-indigo-50 rounded-[28px] border-4 border-slate-50 justify-center items-center inline-flex mb-2">
             <FiMail className="text-xl text-blue-800" />
@@ -49,6 +49,7 @@ const EnterOtp = ({ _this }) => {
             value={otp}
             onChange={setOtp}
             numInputs={4}
+            inputType="tel"
             inputStyle={{
               height: "4rem",
               width: "4rem",
@@ -71,11 +72,11 @@ const EnterOtp = ({ _this }) => {
           Didn’t receive the email?
           <span
             onClick={() => {
-              timer === 0 && _this.onResendOTPSubmit();
+              timer <= 0 && _this.onResendOTPSubmit();
               resetTimer();
             }}
             className={`ml-2 ${
-              timer === 0 ? "text-blue-md" : "text-gray-medium"
+              timer <= 0 ? "text-blue-md" : "text-gray-medium"
             } text-sm font-semibold cursor-pointer select-none`}
           >
             Click to resend OTP

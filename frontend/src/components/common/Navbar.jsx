@@ -20,7 +20,7 @@ const Navbar = () => {
             <Link to="/">
               <p className="text-xl font-bold text-[#334155]">
                 <span className="text-primary text-2xl">E</span>mployee{" "}
-                <span className="text-primary text-2xl">C</span>onnect
+                <span className="text-primary text-2xl">U</span>nite
               </p>
             </Link>
             <div>

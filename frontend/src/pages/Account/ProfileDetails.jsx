@@ -7,6 +7,11 @@ import { GrFormView } from "react-icons/gr";
 import { BiLogOut } from "react-icons/bi";
 import Navbar from "../../components/common/Navbar";
 import { logout } from "../../services/operations/authApi";
+import {
+  MdOutlineMailOutline,
+  MdOutlinePhoneAndroid,
+  MdLocationOn,
+} from "react-icons/md";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const ProfileDetails = ({ _this }) => {
@@ -21,10 +26,14 @@ const ProfileDetails = ({ _this }) => {
     <>
       <Navbar />
       <div className=" body-font py-4 flex flex-col lg:justify-between lg:flex-row min-h-[calc(100vh-65px)] bg-black/5">
-        <div className="w-11/12 sm:w-11/12 md:w-8/12 h-full p-4 px-6 flex flex-col mx-auto">
+        <div className="w-11/12 sm:w-11/12 lg:w-8/12 h-full p-4 px-6 flex flex-col mx-auto">
           <div className="w-full lg:w-11/12 mx-auto">
             <div className="w-full flex justify-between items-center py-5">
-              <p className="text-2xl font-semibold">Profile</p>
+              <p className="text-2xl font-semibold">
+                {_this?.user?.account_type === "Admin"
+                  ? "Admin Dashboard"
+                  : "Profile"}
+              </p>
               <button
                 onClick={() => dispatch(logout(navigate))}
                 className="flex items-center gap-x-1 py-2 px-3 bg-primary text-white rounded-lg"
@@ -51,10 +60,25 @@ const ProfileDetails = ({ _this }) => {
                         {_this?.user?.user_id}
                       </span>
                     </h4>
-                    <h5 className="text-gray-medium text-sm font-normal py-1 break-all">
-                      {_this?.user?.email}
-                    </h5>
-                    <h5 className="text-gray-medium text-xs font-normal text-wrap break-words lg:w-10/12">
+                    <div className="text-gray-medium text-sm font-normal py-1 break-all flex flex-col md:flex-row gap-2">
+                      <p className="flex items-center gap-1">
+                        <MdOutlineMailOutline />
+                        {_this?.user?.email}
+                      </p>
+                      {_this?.user?.phone_number !== "" && (
+                        <p className="flex items-center gap-1">
+                          <MdOutlinePhoneAndroid />
+                          {_this?.user?.phone_number}
+                        </p>
+                      )}
+                      {_this?.user?.location !== "" && (
+                        <p className="flex items-center gap-1">
+                          <MdLocationOn />
+                          {_this?.user?.location}
+                        </p>
+                      )}
+                    </div>
+                    <h5 className="text-gray-medium text-xs font-normal text-wrap break-words lg:w-10/12 py-2">
                       {_this?.user?.bio}
                     </h5>
                   </div>
@@ -63,6 +87,11 @@ const ProfileDetails = ({ _this }) => {
                       e.preventDefault();
                       _this?.setUpdateBioModalOpen(true);
                       _this?.setUserBio(_this?.user?.bio);
+                      _this?.setFormValue({
+                        bio: _this?.user?.bio,
+                        phone_number: _this?.user?.phone_number,
+                        location: _this?.user?.location,
+                      });
                     }}
                     size={25}
                     className="absolute top-4 right-4 cursor-pointer"

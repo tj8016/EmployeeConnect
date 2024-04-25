@@ -20,21 +20,25 @@ const Account = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.profile);
   const { token } = useSelector((state) => state.auth);
-  const [formValue, setFormValue] = useState({
-    email: "",
-    password: "",
-  });
 
   /****************************** update Bio  **************************************/
 
   const [updateBioModalOpen, setUpdateBioModalOpen] = useState(false);
+  const [formValue, setFormValue] = useState({
+    bio: "",
+    phone_number: "",
+    location: "",
+  });
   const [userBio, setUserBio] = useState("");
   const [avatar, setavatar] = useState(null);
 
   const onBioAvatarUpdate = () => {
     const formData = new FormData();
+    console.log(formValue);
     formData.append("avatar", avatar?.data);
-    formData.append("bio", userBio);
+    formData.append("bio", formValue?.bio);
+    formData.append("phone_number", formValue?.phone_number);
+    formData.append("location", formValue?.location);
     updateBioAndAvatar(token, formData)
       .then((response) => {
         if (response) {
@@ -108,6 +112,10 @@ const Account = () => {
           setFiles(null);
           setCertificateTitle({
             certificate_title: "",
+          });
+          setFiles({
+            preview: "",
+            data: "",
           });
         }
       })

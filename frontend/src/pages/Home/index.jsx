@@ -184,6 +184,8 @@ const Home = () => {
   }, []);
 
   const _this = {
+    loading,
+    setLoading,
     allUsersData,
     setAllUsersData,
     allPostData,

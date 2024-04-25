@@ -102,7 +102,7 @@ const LoginForm = ({ _this }) => {
         <div className="flex flex-col py-8 gap-2">
           <div>
             <h4 className="text-primary-text text-4xl font-bold mb-2">
-              Employee Connect
+              Employee Unite
             </h4>
             <h5 className="text-gray-medium text-lg font-normal">
               Empowering professionals to showcase skills and celebrate

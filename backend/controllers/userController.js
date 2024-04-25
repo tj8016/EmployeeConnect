@@ -42,11 +42,13 @@ export const RegisterUser = async (req, res, next) => {
       first_name = "",
       last_name = "",
       email = "",
+      phone_number = "",
       skills = [],
       certificates = [],
       avatar = "",
       password = "",
       account_type = "",
+      location = "",
       bio = "",
       otp = "",
     } = req.body;
@@ -89,6 +91,8 @@ export const RegisterUser = async (req, res, next) => {
       skills,
       certificates,
       email,
+      phone_number,
+      location,
       bio,
       avatar,
       account_type,
@@ -200,6 +204,7 @@ export const Forgetpassword = async (req, res, next) => {
     } else if (otp) {
       let isOtpExists = await DbOtp.findOne({
         email: email,
+        otp: otp,
         createdAt: { $gt: expiry },
       });
       if (!isOtpExists)
@@ -298,7 +303,15 @@ export const ResendOtp = async (req, res, next) => {
 export const UpdateProfile = async (req, res, next) => {
   try {
     // get all data from body
-    const { first_name, last_name, bio = "", email, skills = [] } = req.body;
+    const {
+      first_name,
+      last_name,
+      bio = "",
+      phone_number = "",
+      location = "",
+      email,
+      skills = [],
+    } = req.body;
     const { _id } = req.user;
 
     const avatar = req.files?.avatar;
@@ -326,6 +339,8 @@ export const UpdateProfile = async (req, res, next) => {
     if (last_name) user.last_name = last_name;
     if (email) user.email = email;
     if (bio) user.bio = bio;
+    if (phone_number) user.phone_number = phone_number;
+    if (location) user.location = location;
     if (skills.length) user.skills = skills;
 
     await user.save();
@@ -455,7 +470,7 @@ export const OtherProfile = async (req, res, next) => {
 /************************************* GetAllUser  ***************************************/
 export const GetAllUser = async (req, res, next) => {
   try {
-    const users = await DbUser.find();
+    const users = await DbUser.find({ account_type: { $ne: "Admin" } });
     if (!users) return ResponseErrorHandler(res, 202, "Failed to get Users");
 
     return ResponseHandler(res, 200, "all user", users);

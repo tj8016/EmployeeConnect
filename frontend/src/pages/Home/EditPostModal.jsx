@@ -1,7 +1,6 @@
 import React from "react";
 import { Modal, Input, Image } from "antd";
 import { RiImageAddLine } from "react-icons/ri";
-import { IoClose } from "react-icons/io5";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 

@@ -133,7 +133,8 @@ export const forgotPassword = async (data) => {
     const response = await apiConnector("POST", FORGOT_PASSWORD_API, data);
     if (response?.data?.error) {
       toast.dismiss(toastId);
-      return toast.error(response.data.error);
+      toast.error(response?.data?.error);
+      return result;
     }
     result = response?.data?.data;
   } catch (error) {
@@ -150,7 +151,8 @@ export const resendOtp = async (data) => {
     const response = await apiConnector("POST", RESEND_OTP_API, data);
     if (response?.data?.error) {
       toast.dismiss(toastId);
-      return toast.error(response.data.error);
+      toast.error(response.data.error);
+      return result;
     }
     result = response?.data?.data;
   } catch (error) {

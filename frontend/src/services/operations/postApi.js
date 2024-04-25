@@ -35,7 +35,8 @@ export const createPost = async (data, token) => {
     });
     if (response?.data?.error) {
       toast.dismiss(toastId);
-      return toast.error(response?.data?.error);
+      toast.error(response?.data?.error);
+      return null;
     }
     toast.success("Post Added Successfully");
     result = response?.data;
@@ -56,7 +57,8 @@ export const updatePost = async (data, token) => {
     });
     if (response?.data?.error) {
       toast.dismiss(toastId);
-      return toast.error(response?.data?.error);
+      toast.error(response?.data?.error);
+      return result;
     }
     toast.success("Post Updated");
     result = response?.data;
@@ -69,7 +71,7 @@ export const updatePost = async (data, token) => {
 
 export const deletePost = async (data, token) => {
   const toastId = toast.loading("Loading...");
-  let result = null;
+  let result = false;
   try {
     const response = await apiConnector("DELETE", DELETE_POST_API, data, {
       "Content-Type": "application/json",
@@ -77,7 +79,8 @@ export const deletePost = async (data, token) => {
     });
     if (response?.data?.error) {
       toast.dismiss(toastId);
-      return toast.error(response?.data?.error);
+      toast.error(response?.data?.error);
+      return result;
     }
     result = response?.data;
     toast.success("Post Deleted");
@@ -95,7 +98,8 @@ export const addOrRemoveLike = async (data, token) => {
       Authorization: `Bearer ${token}`,
     });
     if (response?.data?.error) {
-      return toast.error(response?.data?.error);
+      toast.error(response?.data?.error);
+      return false;
     }
   } catch (error) {
     console.log("ADD_REMOVE_LIKE_API ERROR............", error);
@@ -103,14 +107,15 @@ export const addOrRemoveLike = async (data, token) => {
 };
 
 export const addComment = async (data, token) => {
-  let result = null;
+  let result = false;
   try {
     const response = await apiConnector("POST", ADD_COMMENT_API, data, {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     });
     if (response?.data?.error) {
-      return toast.error(response?.data?.error);
+      toast.error(response?.data?.error);
+      return result;
     }
     result = response;
     toast.success("Comment Added");
