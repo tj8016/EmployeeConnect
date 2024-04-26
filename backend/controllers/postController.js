@@ -195,7 +195,8 @@ export const DeleteCommentInAPost = async (req, res, next) => {
     const { post_id, comment_id } = req.body;
 
     const post = await DbPost.findOne({ _id: post_id });
-    if (!post) return ResponseHandler(res, 404, "Post not found.");
+    if (!post)
+      return ResponseHandler(res, 202, "Someone may deleted this post.");
 
     let index = -1,
       arr = post.comments;
@@ -207,7 +208,7 @@ export const DeleteCommentInAPost = async (req, res, next) => {
         break;
       }
     }
-    let message = "comment not found !";
+    let message = "Comment has been already deleted";
     //delete the comment and save the post
     if (index != -1) {
       arr.splice(index, 1);
