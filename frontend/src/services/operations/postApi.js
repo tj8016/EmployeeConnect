@@ -9,6 +9,7 @@ const {
   DELETE_POST_API,
   ADD_REMOVE_LIKE_API,
   ADD_COMMENT_API,
+  DELETE_COMMENT_API,
 } = postEndpoints;
 
 export const getAllPost = async () => {
@@ -122,5 +123,27 @@ export const addComment = async (data, token) => {
   } catch (error) {
     console.log("ADD_COMMENT_API ERROR............", error);
   }
+  return result;
+};
+
+export const deleteComment = async (data, token) => {
+  const toastId = toast.loading("Loading...");
+  let result = false;
+  try {
+    const response = await apiConnector("DELETE", DELETE_COMMENT_API, data, {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    });
+    if (response?.data?.error) {
+      toast.dismiss(toastId);
+      toast.error(response?.data?.error);
+      return result;
+    }
+    result = response?.data;
+    toast.success("Comment Deleted");
+  } catch (error) {
+    console.log("DELETE_COMMENT_API ERROR............", error);
+  }
+  toast.dismiss(toastId);
   return result;
 };

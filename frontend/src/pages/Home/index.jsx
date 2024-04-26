@@ -10,6 +10,7 @@ import {
   updatePost,
   addOrRemoveLike,
   addComment,
+  deleteComment,
 } from "../../services/operations/postApi";
 import { getAllUser } from "../../services/operations/authApi";
 
@@ -24,6 +25,8 @@ const Home = () => {
   });
   const [addPostModal, setAddPostModal] = useState(false);
   const [editPostModal, setEditPostModal] = useState(false);
+  const [deleteCommentModal, setDeleteCommentModal] = useState(false);
+  const [deleteCommentData, setDeleteCommentData] = useState(null);
   const [deletePostModal, setDeletePostModal] = useState(false);
   const [deletePostData, setDeletePostData] = useState(null);
   const [postData, setPostData] = useState({
@@ -142,6 +145,25 @@ const Home = () => {
     }
   };
 
+  const deleteCommentSubmit = async () => {
+    console.log(deleteCommentData);
+    setLoading(true);
+    try {
+      const data = {
+        post_id: deletePostData?._id,
+      };
+      const result = await deleteComment(deleteCommentData, token);
+      if (result) {
+        setDeleteCommentData(null);
+        setDeleteCommentModal(false);
+        getAllPostFunc();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
   const getAllUsersData = async () => {
     getAllUser()
       .then((response) => {
@@ -210,6 +232,11 @@ const Home = () => {
     commentData,
     setCommentData,
     addCommentSubmit,
+    deleteCommentModal,
+    setDeleteCommentModal,
+    deleteCommentData,
+    setDeleteCommentData,
+    deleteCommentSubmit,
     setPostImageFile,
     uploadImageFile,
     createPostSubmit,

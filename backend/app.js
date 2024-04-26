@@ -1,7 +1,6 @@
 import express, { urlencoded } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import cloudinary from "cloudinary";
 import fileupload from "express-fileupload";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";

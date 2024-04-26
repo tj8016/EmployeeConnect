@@ -7,6 +7,7 @@ import DeletePostModal from "./DeletePostModal";
 import EditPostModal from "./EditPostModal";
 import AddCommentModal from "./AddCommentModal";
 import { Empty } from "antd";
+import DeleteCommentModal from "./DeleteCommentModal";
 
 const Body = (_this) => {
   return (
@@ -37,6 +38,7 @@ const Body = (_this) => {
         {_this.deletePostModal && <DeletePostModal _this={_this} />}
         {_this.editPostModal && <EditPostModal _this={_this} />}
         {_this.addCommentModal && <AddCommentModal _this={_this} />}
+        {_this.deleteCommentModal && <DeleteCommentModal _this={_this} />}
       </div>
     </>
   );

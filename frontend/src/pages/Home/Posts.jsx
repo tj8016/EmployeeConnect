@@ -86,18 +86,39 @@ const Posts = ({ post, _this }) => {
         <div className="flex flex-col gap-y-2">
           {post?.comments.map((comment, index) => {
             return (
-              <div key={index} className="bg-white rounded-md pl-3 py-2">
-                <p className="text-xs font-bold">
-                  {`${comment?.user?.first_name} ${comment?.user?.last_name}`}
-                  {post?.owner?._id === comment?.user?._id && (
-                    <span className="ml-2 font-light text-xs bg-green-400/80 text-white rounded-full px-1">
-                      Author
-                    </span>
-                  )}
-                </p>
-                <p className="text-sm font-light text-black/80">
-                  {comment?.comment}
-                </p>
+              <div
+                key={index}
+                className="bg-white rounded-md pl-3 py-2 flex items-center justify-between"
+              >
+                <div>
+                  <p className="text-xs font-bold">
+                    {`${comment?.user?.first_name} ${comment?.user?.last_name}`}
+                    {post?.owner?._id === comment?.user?._id && (
+                      <span className="ml-2 font-light text-xs bg-green-400/80 text-white rounded-full px-1">
+                        Author
+                      </span>
+                    )}
+                  </p>
+                  <p className="text-sm font-light text-black/80">
+                    {comment?.comment}
+                  </p>
+                </div>
+                {(user?._id === comment?.user?._id ||
+                  post?.owner?._id === user?._id) && (
+                  <div>
+                    <HiOutlineTrash
+                      size={20}
+                      className="mr-6 flex justify-center items-center text-secondary cursor-pointer"
+                      onClick={() => {
+                        _this?.setDeleteCommentModal(true);
+                        _this?.setDeleteCommentData({
+                          post_id: post._id,
+                          comment_id: comment?._id,
+                        });
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             );
           })}
